@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'users_app',
 ]
 
-# AUTH_USER_MODEL = 'users_app.User'
+AUTH_USER_MODEL = 'users_app.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -122,3 +122,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+AUTHENTICATION_BACKENDS = (
+        'django.contrib.auth.backends.ModelBackend',
+)
