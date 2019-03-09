@@ -1,13 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-import datetime
 from enum import Enum
 
-# Create your models here.
+# uses_app #
 
 class UserRoles(Enum):
     REG = 'Regular employee'
     MAN = 'Project manager'
+
+
+## UWAGA nie może być NONE i coś innego - zaimplementować mechanizm zmiany!!
+class Proffessions(Enum):
+    NONE = 'Not assigned'
+    PROG = 'Programmer'
+    TEST = 'Tester'
+    MAN  = 'Project manager'
+    ARCH = 'System architect'
+    ADMN = 'System administrator'
+    #Et cetera
 
 
 class UserManager(BaseUserManager):
@@ -39,19 +49,28 @@ class UserManager(BaseUserManager):
         return user_obj
 
 
+class Proffession(models.Model):
+    proffession_name = models.CharField(max_length=15,
+    choices=[(tag.name, tag.value) for tag in Proffessions])
+
+    def __str__(self):
+        return Proffessions[self.proffession_name].value
+
 class User(AbstractBaseUser):
 
     username = None
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=100, default='derp')
     surname = models.CharField(max_length=100, default='derpington')
-    birth_date = models.DateField(null=True)
-    active = models.BooleanField(default=True)
+    birth_date = models.DateField(default=None, blank=True, null=True)
+    register_date = models.DateTimeField(auto_now_add=True, blank=True)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
-    role = models.CharField(max_length=3,
-                            choices=[(tag, tag.value) for tag in UserRoles],
-                            default=UserRoles.REG)
+    active = models.BooleanField(default=True) #status użytkownika
+    role = models.CharField(max_length=15,
+                            choices=[(tag.name, tag.value) for tag in UserRoles],
+                            default=UserRoles.REG) #Rola użytkownika w systemie (Uprawnienia)
+    proffession = models.ManyToManyField(Proffession)#Specjalność
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

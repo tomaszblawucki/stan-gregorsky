@@ -1,0 +1,63 @@
+##Struktura##
+======================
+grupa_projektowa
+status_grupy (ENUM)
+======================
+uzytkownik
+uprawnienie (ENUM)
+specjalnosc (ENUM)
+status_uzytkownika (ENUM)
+======================
+wydarzenie
+status_wydarzenia (ENUM)
+typ_wydarzenia (ENUM)
+pomysl
+ocena_pomyslu
+komentarz
+======================
+zadanie
+status_zadania (ENUM)
+======================
+wiadomosc
+zalacznik
+zasob
+rodzaj_zasobu (ENUM)
+======================
+notatka
+======================
+
+
+
+##tabele główne##
+grupa_projektowa
+uzytkownik
+wydarzenie
+pomysl
+ocena_pomyslu
+zadanie
+wiadomosc
+notatka
+komentarz
+zalacznik
+zasob
+
+##tabele pośrednie##
+
+wydarzenie_uzytkownik
+grupa_uzytkownik
+notatka_zalacznik
+pomysl_zalacznik
+komentarz_zalacznik
+wiadomosc_uzytkownik
+
+
+## POTENCJALNE POLA ENUM ##
+
+status_grupy (ENUM)
+uprawnienie (ENUM)
+specjalnosc (ENUM)
+status_uzytkownika (ENUM)
+status_wydarzenia (ENUM)
+typ_wydarzenia (ENUM)
+status_zadania (ENUM)
+rodzaj_zasobu (ENUM)
