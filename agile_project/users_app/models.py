@@ -21,7 +21,9 @@ class Proffessions(Enum):
 
 
 class UserManager(BaseUserManager):
+
     def create_user(self, email, password, name, surname, birth_date=None):
+        print("MODEL:", self.model)
         if not email: raise ValueError("email required")
         if not password: raise ValueError("password required")
         if not name: raise ValueError("name required")
