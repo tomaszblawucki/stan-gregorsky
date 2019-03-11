@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.HomeView.as_view(), name='users_home'),
     path('get-token/', obtain_auth_token, name='get_token_api'),
     path('register/', views.RegisterView.as_view(), name='register_user')
+    path('dummy/', views.DummyView.as_view(), name='dummy')
 ]
 # to login ( obtain token )
 # http http://localhost:8000/users/get-token/ username=<email> password=<pass>

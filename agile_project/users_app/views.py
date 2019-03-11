@@ -24,3 +24,10 @@ class RegisterView(APIView):
             serialized.create(request.data)
             return Response(serialized.data, status=status.HTTP_201_CREATED)
         return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DummyView(APIView):
+    
+    def get(self, requeest):
+        content = {'message': 'Siergiej działa!'}
+        return Response(content)
