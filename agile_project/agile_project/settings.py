@@ -37,7 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #rest framework
     'rest_framework',
+    'rest_framework.authtoken',
+    #project apps
     'events_app',
     'group_management_app',
     'ideas_app',
@@ -45,6 +49,9 @@ INSTALLED_APPS = [
     'tasks_app',
     'users_app',
 ]
+
+
+# c4c15f3c192281c6e5bc46a726f80229c220f6f2
 
 AUTH_USER_MODEL = 'users_app.User'
 
@@ -132,3 +139,8 @@ STATIC_URL = '/static/'
 AUTHENTICATION_BACKENDS = (
         'django.contrib.auth.backends.ModelBackend',
 )
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  # <-- And here
+    ],
+}
