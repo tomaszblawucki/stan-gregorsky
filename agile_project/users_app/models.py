@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from enum import Enum
-
+import datetime
 # uses_app #
 
 class UserRoles(Enum):
@@ -18,6 +18,8 @@ class Proffessions(Enum):
     ARCH = 'System architect'
     ADMN = 'System administrator'
     #Et cetera
+
+
 
 
 class UserManager(BaseUserManager):
@@ -50,6 +52,10 @@ class UserManager(BaseUserManager):
         user_obj.save(using=self._db)
         return user_obj
 
+class ResetPasswordToken(models.Model):
+    email = models.EmailField(max_length=255)
+    token = models.CharField(max_length=5)
+    expire_date = models.DateTimeField(default=datetime.datetime.now() + datetime.timedelta(days=1))
 
 class Proffession(models.Model):
     proffession_name = models.CharField(max_length=15,

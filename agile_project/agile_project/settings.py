@@ -25,7 +25,7 @@ SECRET_KEY = 'e8z01pr1la8!&w8z6hj)clu1_r&*4jp-y#f-w8j4kk@@t#15si'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.0.2.2', 'localhost']
 
 
 # Application definition
@@ -144,3 +144,12 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',  # <-- And here
     ],
 }
+
+# Email service configuration
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'agileappsmtp'
+EMAIL_HOST_PASSWORD = 'maszynaturinga'
+EMAIL_PORT = 587
