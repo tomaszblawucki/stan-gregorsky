@@ -4,9 +4,11 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import obtain_auth_token
 
 from .models import User, ResetPasswordToken
 from .serializers import UserSerializer
@@ -16,7 +18,15 @@ from random import randint
 from datetime import datetime
 import pytz
 
-utc =pytz.UTC
+utc = pytz.UTC
+
+'''
+TO DO:
+- Lista wszystkich użytkowników
+- Lista użytkowników filtrowana po specjalizacji, stażu, grupie itd
+- Dane szczegółowe zalogowanego użytkownika
+- Zaimplementuj AuthToken (ostatnio zalogowano..) https://www.django-rest-framework.org/api-guide/authentication/
+'''
 
 
 class HomeView(APIView):
@@ -24,6 +34,9 @@ class HomeView(APIView):
     def get(self, request):
         content = {'message':'HOME VIEW'}
         return Response(content)
+
+class LoginView(APIView):
+    pass
 
 
 class RegisterView(APIView):
@@ -35,38 +48,64 @@ class RegisterView(APIView):
             return Response(serialized.data, status=status.HTTP_201_CREATED)
         return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
 
+class UsersViewSet(viewsets.ViewSet):
+    permission_classes = (IsAuthenticated,)
+    # serializer_class = UserSerializer
+    # queryset = User.objects.all()
+
+    def list(self, request):
+        queryset = User.objects.all().values('id', 'email')
+        # serializer = UserSerializer(queryset, many=True, allow_null=True)
+        # print(serializer.data)
+        return Response(queryset)
+
+    def retrieve(self, request):
+        return Response('Single User View')
+
+    def get_user_info(self, request):
+        # http http://localhost:8000/users/personal/  'Authorization: Token a1b1cc9bff5d523ba578a749b8ee6daaf02e903f'
+        current_user = User.objects.defer('password').filter(id=request.user.id).values()
+        exclude_fields = ('password',)
+        [[d.pop(key, None) for d in current_user] for key in exclude_fields]
+        print(current_user)
+        return Response(current_user)
+    # def retrieve(self, request, pk=None):
+
+
+
 class ForgotPasswordView(APIView):
 
     def post(self, request):
         '''
         method gets email of user ant checks if it's valid, then sends email with one_shot password
         '''
-        # print('='*20, '\n', request)
-        # print('\n', request.__dict__)
-        # print('\n', request.data)
-        # print(dir(request))
         try:
             email = request.data['username']
         except:
-            return Response({'message':'invalid email'})
-
+            return Response({'message':'invalid email'},status=status.HTTP_400_BAD_REQUEST)
         if User.objects.filter(email=email).exists():
-
-            reset_token = randint(10000, 99999)
+            has_token = False
+            token_obj = ResetPasswordToken.objects.filter(email=email,expire_date__gt=utc.localize(datetime.now())).order_by('expire_date')
+            if not token_obj.exists():
+                reset_token = randint(10000, 99999)
+            else:
+                reset_token = token_obj[0].token
+                print(reset_token)
             try:
                 send_mail(
                     'Your reset password token',
                     f'Please go to your application and assign new password to your account {reset_token}',
                     'agile_app@company.com',
-                    ['italo.doc@cowstore.org'],# change to user email-username
+                    ['tomasz13191@gmail.com'],# change to user email-username
                     fail_silently=False)
-                token_obj = ResetPasswordToken(email=email, token=reset_token)
-                token_obj.save()
+                if not has_token:
+                    token_obj = ResetPasswordToken(email=email, token=reset_token)
+                    token_obj.save()
                 return Response({'message':f'email with temporary password was sent to {request.data["username"]}'})
             except:
-                return Response({'error':'internal error during email send process'})
+                return Response({'error':'internal error during email send process'}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({'message':'user with specified email not found in system'})
+            return Response({'message':'user with specified email not found in system'}, status=status.HTTP_400_BAD_REQUEST)
 
 class ResetPasswordView(APIView):
 # http http://localhost:8000/users/reset-password/ username=tom@gmail.com code=75532 new_password=haslo12345
@@ -88,9 +127,9 @@ class ResetPasswordView(APIView):
                     print(user.password)
                     return Response({'message':'Password changed successfully!'})
                 except Exception as e:
-                    return Response({'error': f'{e}'})
+                    return Response({'error': f'{e}'}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                return Response({'error':'Reset code has expired'})
+                return Response({'error':'Reset code has expired'}, status=status.HTTP_400_BAD_REQUEST)
 
 
         except ObjectDoesNotExist:

@@ -31,7 +31,8 @@ class Message(models.Model):
         through_fields=('message', 'addressee'))
     attachments = models.ManyToManyField(Attachment,
         through='MessageAttachment',
-        through_fields=('message', 'attachment'))
+        through_fields=('message', 'attachment'),
+        blank=True)
 
 
 class MessageAddressee(models.Model):

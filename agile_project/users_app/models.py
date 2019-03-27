@@ -58,11 +58,15 @@ class ResetPasswordToken(models.Model):
     expire_date = models.DateTimeField(default=datetime.datetime.now() + datetime.timedelta(days=1))
 
 class Proffession(models.Model):
-    proffession_name = models.CharField(max_length=15,
-    choices=[(tag.name, tag.value) for tag in Proffessions])
+    proffession_name = models.CharField(max_length=20)
+    proffession_description = models.TextField(max_length=1024, blank=True, default='')
+    # choices=[(tag.name, tag.value) for tag in Proffessions])
 
     def __str__(self):
-        return Proffessions[self.proffession_name].value
+        return self.proffession_name
+
+
+
 
 class User(AbstractBaseUser):
 

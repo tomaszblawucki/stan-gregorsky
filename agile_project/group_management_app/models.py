@@ -21,7 +21,8 @@ class ProjectGroup(models.Model):
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='group_creator')
     members = models.ManyToManyField(User,
     through='GroupMember',
-    through_fields=('group', 'user'))
+    through_fields=('group', 'user'),
+    blank=True)
 
 class GroupMember(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
