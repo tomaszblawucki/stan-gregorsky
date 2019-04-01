@@ -21,5 +21,3 @@ class Note(models.Model):
 class NoteAttachment(models.Model):
     note = models.ForeignKey(Note, on_delete=models.CASCADE)
     attachment = models.ForeignKey(Attachment, on_delete=models.CASCADE)
-    # class Meta:
-    #     auto_created = True

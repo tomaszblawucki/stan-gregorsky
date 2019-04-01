@@ -12,8 +12,6 @@ from .models import Note
 class CreateNote(APIView):
     permission_classes = (IsAuthenticated,)
     def post(self, request):
-        print(request.user)
-        request.data['attachments'] = None
         serialized = NoteSerializer(data=request.data)
         if serialized.is_valid():
             serialized.create(request.user, request.data)
@@ -37,11 +35,32 @@ class ListNotes(viewsets.ViewSet):
         return Response(serializer.data)
 
     def update(self, request, pk=None):
-        print('UPDATE')
+        items = request.data
+        print(items)
+        new_title = items.get('title', None)
+        new_content = items.get('content', None)
+        attachments = items.get('attachments', None)
+        try:
+            note_obj = Note.objects.get(pk=pk)
+        except:
+            return Response({'message':"specified note doesn't exists"},
+                            status=status.HTTP_404_NOT_FOUND)
+        if new_title: note_obj.title=new_title
+        if new_content: note_obj.content=new_content
+        if attachments:
+            return Response({'message':'Internal error'},
+                                        status=status.HTTP_501_NOT_IMPLEMENTED)
+        note_obj.save()
         return Response({'message':'Note updated successfuly'},
                           status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None):
-        print('DELETE')
+        queryset = Note.objects.filter(owner=request.user)
+        note_obj = get_object_or_404(queryset, pk=pk)
+        try:
+            note_obj.delete()
+        except:
+            return Response({'message':'Error ocured while during delete action'},
+                            status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response({'message':'Note deleted'},
                           status=status.HTTP_200_OK)

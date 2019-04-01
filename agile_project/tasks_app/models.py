@@ -14,6 +14,7 @@ class TaskStatus(Enum):
 
 
 class Task(models.Model):
+    title = models.CharField(max_length=80)
     description = models.TextField(max_length=1024)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
