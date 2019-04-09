@@ -17,7 +17,7 @@ class CreateTask(APIView):
         if serializer.is_valid():
             serializer.create(request.user, request.data)
         else:
-            return Response({'message':f'{serializer.errors}'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'message':f'{serializer.errors}'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'message':'Task created'})
 
 class ListTasks(viewsets.ViewSet):

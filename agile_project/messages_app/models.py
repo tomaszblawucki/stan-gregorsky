@@ -26,6 +26,7 @@ class Message(models.Model):
     content = models.TextField(max_length=2048)
     sent_date = models.DateTimeField(auto_now_add=True)
     attached_note = models.ForeignKey(Note, models.SET_NULL, blank=True, null=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_sender')
     addressee = models.ManyToManyField(User,
         through='MessageAddressee',
         through_fields=('message', 'addressee'))
