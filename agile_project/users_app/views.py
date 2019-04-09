@@ -35,10 +35,6 @@ class HomeView(APIView):
         content = {'message':'HOME VIEW'}
         return Response(content)
 
-class LoginView(APIView):
-    pass
-
-
 class RegisterView(APIView):
 
     def post(self, request):

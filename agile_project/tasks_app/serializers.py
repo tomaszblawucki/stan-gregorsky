@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
-from .models import Task
+from .models import Task, TaskStatus
 from users_app.models import User
 from datetime import datetime
 import pytz
@@ -52,10 +52,19 @@ class TaskSerializer(serializers.ModelSerializer):
             task_obj.description = validated_data.get('description', task_obj.description)
             task_obj.start_date = validated_data.get('start_date', task_obj.start_date)
             task_obj.end_date = validated_data.get('end_date', task_obj.end_date)
+            task_status = validated_data.get('task_status', task_obj.status)
+            if status not in TaskStatus.__members__:
+                raise serializers.ValidationError({'message':'invalid task status value'})
+            task_obj.status = TaskStatus[task_status]
+            if validated_data.get('assigned_user', None):
+                try:
+                    assigned_user = User.objects.get(pk=validated_data['assigned_user'])
+                    task_obj.assigned_user = assigned_user
+                except:
+                    raise serializers.ValidationError({'message':'target user does not exist'})
+            if validated_data.get('project_group', None):
+                pass # TO DO
             task_obj.save()
-
-        # for key in validated_data.keys():
-
 
     class Meta:
         model = Task

@@ -49,7 +49,7 @@ class ListNotes(viewsets.ViewSet):
         if new_content: note_obj.content=new_content
         if attachments:
             return Response({'message':'Internal error'},
-                                        status=status.HTTP_501_NOT_IMPLEMENTED)
+                            status=status.HTTP_501_NOT_IMPLEMENTED)
         note_obj.save()
         return Response({'message':'Note updated successfuly'},
                           status=status.HTTP_200_OK)
@@ -60,7 +60,7 @@ class ListNotes(viewsets.ViewSet):
         try:
             note_obj.delete()
         except:
-            return Response({'message':'Error ocured while during delete action'},
+            return Response({'message':'Error ocured during delete action'},
                             status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response({'message':'Note deleted'},
                           status=status.HTTP_200_OK)
