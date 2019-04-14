@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -6,7 +5,6 @@ from rest_framework.permissions import BasePermission, IsAuthenticated
 
 from .models import Message, MessageAddressee
 from .serializers import MessageSerializer, MessageSerializerForCreate
-# Create your views here.
 
 class ListMessages(viewsets.ViewSet):
     permission_classes = (IsAuthenticated,)
@@ -25,7 +23,7 @@ class ListMessages(viewsets.ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        queryset = Message.objects.filter(addressee=request.user.id)
+        queryset = Message.objects.filter(addressee=request.user.id) | Message.objects.filter(sender=request.user.id)
         try:
             message = queryset.get(pk=pk)
         except:
@@ -38,5 +36,10 @@ class ListMessages(viewsets.ViewSet):
 
     def get_recent_messages(self, request):
         queryset = Message.objects.filter(addressee=request.user.id).order_by('-sent_date')
+        serializer = MessageSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def get_sent_messages(self, request):
+        queryset = Message.objects.filter(sender=request.user.id).order_by('-sent_date')
         serializer = MessageSerializer(queryset, many=True)
         return Response(serializer.data)

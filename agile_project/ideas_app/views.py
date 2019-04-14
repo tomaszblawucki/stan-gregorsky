@@ -36,7 +36,6 @@ class ListNotes(viewsets.ViewSet):
 
     def update(self, request, pk=None):
         items = request.data
-        print(items)
         new_title = items.get('title', None)
         new_content = items.get('content', None)
         attachments = items.get('attachments', None)

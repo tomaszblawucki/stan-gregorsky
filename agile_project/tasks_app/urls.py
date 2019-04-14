@@ -12,10 +12,10 @@ task_assign_user = views.ListTasks.as_view({'post':'assign_to_user'})
 
 urlpatterns = [
     path('create/', views.CreateTask.as_view(), name='create_task'),
-    path('list/', tasks_list, name='list_tasks'),
-    path('list/<int:pk>/', task_details, name='task_detail'),
-    path('list/<int:pk>/update/', task_update, name='task_update'),
-    path('list/<int:pk>/destroy/', task_delete, name='task_destroy'),
-    path('list/<int:pk>/change-status/', task_change_status, name='task_change_status'),
-    path('list/<int:pk>/assign-user/', task_assign_user, name='task_assign_user'),
+    path('', tasks_list, name='list_tasks'),
+    path('<int:pk>/', task_details, name='task_detail'),
+    path('<int:pk>/update/', task_update, name='task_update'),
+    path('<int:pk>/destroy/', task_delete, name='task_destroy'),
+    path('<int:pk>/change-status/', task_change_status, name='task_change_status'),
+    path('<int:pk>/assign-user/', task_assign_user, name='task_assign_user'),
 ]

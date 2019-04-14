@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
+
 from .models import Message, MessageAddressee
 from users_app.models import User
 

@@ -7,17 +7,19 @@ from users_app.models import User
 # grupa_projektowa, członkowstwo, (E)status_grupy
 
 class ProjectGroupStatus(Enum):
-    INIT = 'PLACEHOLDER -> DEFINE STATUS'
+    ACTIVE = 'Active' #Project group is active
+    CLOSED = 'Closed' #Project has ended
 
 class ProjectGroup(models.Model):
-    name = models.CharField(max_length=50)
+    group_name = models.CharField(max_length=50)
     project_name = models.CharField(max_length=50)
     project_description = models.TextField(max_length=1024)
     creation_date = models.DateTimeField(auto_now_add=True)
+    planned_start_date = models.DateTimeField(auto_now_add=True)
     planned_end_date = models.DateTimeField(null=True, blank=True, default=None)
     status = models.CharField(max_length=5,
                               choices=[(tag.name, tag.value) for tag in ProjectGroupStatus],
-                              default=ProjectGroupStatus.INIT)
+                              default=ProjectGroupStatus.ACTIVE)
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='group_creator')
     members = models.ManyToManyField(User,
     through='GroupMember',
