@@ -114,8 +114,6 @@ class ListTasks(viewsets.ViewSet):
         except:
             return Response({'message': 'User not exists.'},
                              status=status.HTTP_404_NOT_FOUND)
-
-        print(request.user.role)
         if task_obj.assigned_user and request.user.role != 'MAN':
             return Response({'Only Project Manager can change person already assigned to task'})
         task_obj.assigned_user = user_obj

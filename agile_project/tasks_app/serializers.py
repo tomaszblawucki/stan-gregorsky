@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 from .models import Task, TaskStatus
 from users_app.models import User
+from group_management_app.models import ProjectGroup
 from datetime import datetime
 import pytz
 
@@ -30,18 +31,20 @@ class TaskSerializer(serializers.ModelSerializer):
         start_date = validated_data.get('start_date')
         end_date = validated_data.get('end_date')
         assigned_user = validated_data.get('assigned_user')
-        if assigned_user:
-            assigned_user = User.objects.get(pk=assigned_user)
-        # project_group = validated_data.get('project_group')
+        project_group = validated_data.get('project_group')
         task_obj = Task.objects.create(
             title=title,
             description=description,
             start_date=start_date,
             end_date=end_date,
             creator=creator,
-            assigned_user=assigned_user,
-            # project_group=project_group,
             )
+        if assigned_user:
+            assigned_user = User.objects.get(pk=assigned_user)
+            task_obj.assigned_user = assigned_user
+        if project_group:
+            project_group = ProjectGroup.objects.get(pk=project_group)
+            task_obj.project_group = project_group
         task_obj.save()
 
     def update(self, data, pk):
@@ -53,17 +56,21 @@ class TaskSerializer(serializers.ModelSerializer):
             task_obj.start_date = validated_data.get('start_date', task_obj.start_date)
             task_obj.end_date = validated_data.get('end_date', task_obj.end_date)
             task_status = validated_data.get('task_status', task_obj.status)
-            if status not in TaskStatus.__members__:
-                raise serializers.ValidationError({'message':'invalid task status value'})
+            if task_status not in TaskStatus.__members__:
+                raise serializers.ValidationError('invalid task status value')
             task_obj.status = TaskStatus[task_status]
-            if validated_data.get('assigned_user', None):
+            if validated_data.get('assigned_user', False):
                 try:
                     assigned_user = User.objects.get(pk=validated_data['assigned_user'])
                     task_obj.assigned_user = assigned_user
                 except:
-                    raise serializers.ValidationError({'message':'target user does not exist'})
-            if validated_data.get('project_group', None):
-                pass # TO DO
+                    raise serializers.ValidationError('target user does not exist')
+            if validated_data.get('project_group', False):
+                try:
+                    project_group = ProjectGroup.objects.get(pk=validated_data['project_group'])
+                    task_obj.project_group = project_group
+                except:
+                    raise serializers.ValidationError({'group not exists'})
             task_obj.save()
 
     class Meta:
