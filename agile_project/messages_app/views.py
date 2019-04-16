@@ -4,7 +4,24 @@ from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAuthenticated
 
 from .models import Message, MessageAddressee
-from .serializers import MessageSerializer, MessageSerializerForCreate
+from users_app.models import User
+from .serializers import MessageSerializer, MessageSerializerForCreate, ConversationSerializer
+
+
+
+class ConversationView(viewsets.ViewSet):
+    permission_classes = (IsAuthenticated,)
+
+    def get_conversation(self, request, pk=None):
+        try:
+            addressee = User.objects.get(id=pk)
+        except Exception as e:
+            print(e)
+            return Response({'message':'addressee not found.'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = ConversationSerializer(data=request.data)
+        serializer.get_conversation(addressee.pk, request.user.pk)
+        return Response({'message':'conversation endpoint'})
+
 
 class ListMessages(viewsets.ViewSet):
     permission_classes = (IsAuthenticated,)

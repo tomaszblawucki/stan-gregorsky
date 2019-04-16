@@ -35,6 +35,8 @@ class Message(models.Model):
         through_fields=('message', 'attachment'),
         blank=True)
 
+    def __str__(self):
+        return f'{self.sent_date} | {self.sender} | {self.addressee.first()} | {self.content}'
 
 class MessageAddressee(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE)

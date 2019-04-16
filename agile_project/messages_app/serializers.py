@@ -3,7 +3,36 @@ from rest_framework.serializers import ValidationError
 
 from .models import Message, MessageAddressee
 from users_app.models import User
+from datetime import datetime, timedelta, timezone
 
+
+class ConversationSerializer(serializers.ModelSerializer):
+
+    def get_conversation(self, addressee_pk, user_pk):
+        messages = Message.objects.filter(addressee=addressee_pk, sender=user_pk) | \
+                   Message.objects.filter(addressee=user_pk, sender=addressee_pk)
+        conversation = []
+        partial = {}
+        for message in messages:
+            addressee = message.addressee.first()
+            sender = message.sender
+            partial = {
+                'owner':message.sender.id == user_pk,
+                'content':message.content,
+                'sender':sender.email,
+                'sender_id':sender.id,
+                'addressee':addressee.email,
+                'addresse_id':addressee.id,
+                'datetime': message.sent_date.strftime("%Y-%m-%d %H:%M") \
+                    if message.sent_date - datetime.now(timezone.utc)  < timedelta(days = -1) \
+                    else message.sent_date.strftime("%H:%M:%S")
+            }
+            conversation.append(partial)
+        return conversation
+        
+    class Meta:
+        model=Message
+        fields=('content', 'sender', 'addressee', 'sent_date')
 
 class MessageSerializerForCreate(serializers.ModelSerializer):
 
