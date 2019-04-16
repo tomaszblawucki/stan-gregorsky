@@ -19,8 +19,8 @@ class ConversationView(viewsets.ViewSet):
             print(e)
             return Response({'message':'addressee not found.'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = ConversationSerializer(data=request.data)
-        serializer.get_conversation(addressee.pk, request.user.pk)
-        return Response({'message':'conversation endpoint'})
+        response = serializer.get_conversation(addressee.pk, request.user.pk)
+        return Response(response)
 
 
 class ListMessages(viewsets.ViewSet):
