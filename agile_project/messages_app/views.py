@@ -3,9 +3,11 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, IsAuthenticated
 
+from django.db.models import Q
 from .models import Message, MessageAddressee
 from users_app.models import User
-from .serializers import MessageSerializer, MessageSerializerForCreate, ConversationSerializer
+from group_management_app.models import ProjectGroup, GroupMember
+from .serializers import MessageSerializer, MessageSerializerForCreate, ConversationSerializer #NotificationSerializer
 
 
 
@@ -20,8 +22,49 @@ class ConversationView(viewsets.ViewSet):
             return Response({'message':'addressee not found.'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = ConversationSerializer(data=request.data)
         response = serializer.get_conversation(addressee.pk, request.user.pk)
+        serializer.mark_as_readen(addressee=request.user, sender=addressee)
         return Response(response)
 
+    def get_recent_messages(self, request):
+        serializer=ConversationSerializer(data=request.data)
+        response = serializer.get_recent_messages(user=request.user)
+        return Response(response)
+
+class NotificationView(viewsets.ViewSet):
+    permission_classes = (IsAuthenticated,)
+
+    def get_notifications(self, request):
+        serializer=ConversationSerializer(data=request.data)
+        response = serializer.get_notifications(user=request.user)
+        return Response(response)
+
+
+class ContactsList(viewsets.ViewSet):
+    permission_classes = (IsAuthenticated,)
+
+    def get_contacts(self, request):
+        user_groups = GroupMember.objects.filter(user=request.user)
+        user_groups = [group.group for group in user_groups.all()]
+        contact_groups = []
+        for group in user_groups:
+            partial_members = []
+            for contact in group.members.filter(~Q(id=request.user.id)):
+                partial_members.append(
+                    {
+                    'id':contact.id,
+                    'email':contact.email,
+                    'proffession':[proffession.proffession_name for proffession in contact.proffession.all()],
+                    'name':contact.name,
+                    'surname':contact.surname,
+                    }
+                )
+            contact_groups.append({
+            'group_id':group.id,
+            'group_name':group.group_name,
+            'project_name':group.project_name,
+            'members':partial_members
+            })
+        return Response(contact_groups)
 
 class ListMessages(viewsets.ViewSet):
     permission_classes = (IsAuthenticated,)

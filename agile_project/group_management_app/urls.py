@@ -11,6 +11,7 @@ group_reopen = views.ProjectGroupView.as_view({'get':'reopen_group'})
 group_delete_members = views.ProjectGroupView.as_view({'post':'delete_members'})
 group_add_members = views.ProjectGroupView.as_view({'post':'add_members'})
 group_details = views.ProjectGroupView.as_view({'get':'retrieve'})
+group_members = views.ProjectGroupView.as_view({'get':'get_group_members'})
 
 urlpatterns = [
     path('create/', group_create, name='create_group'),
@@ -20,5 +21,6 @@ urlpatterns = [
     path('<int:pk>/reopen/', group_reopen, name='reopen_group'),
     path('<int:pk>/delete_members/', group_delete_members, name='delete_members'),
     path('<int:pk>/add_members/', group_add_members, name='add_members'),
-    path('<int:pk>/', group_details, name='group_details')
+    path('<int:pk>/', group_details, name='group_details'),
+    path('<int:pk>/members/', group_members, name='group_members')
 ]

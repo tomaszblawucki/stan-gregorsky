@@ -27,6 +27,8 @@ class Message(models.Model):
     sent_date = models.DateTimeField(auto_now_add=True)
     attached_note = models.ForeignKey(Note, models.SET_NULL, blank=True, null=True)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_sender')
+    readen = models.BooleanField(default=False)
+    notification = models.BooleanField(default=False)
     addressee = models.ManyToManyField(User,
         through='MessageAddressee',
         through_fields=('message', 'addressee'))
@@ -36,7 +38,7 @@ class Message(models.Model):
         blank=True)
 
     def __str__(self):
-        return f'{self.sent_date} | {self.sender} | {self.addressee.first()} | {self.content}'
+        return f'{self.sent_date} | {self.sender} | {self.addressee.all()} | {self.content} | {self.readen}'
 
 class MessageAddressee(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE)

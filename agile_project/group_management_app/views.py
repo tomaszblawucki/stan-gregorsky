@@ -141,6 +141,23 @@ class ProjectGroupView(viewsets.ViewSet):
         group_obj.save()
         return Response({'message':'Group re-opened'})
 
-
     def retrieve(self, request, pk=None):
         pass
+
+    def get_group_members(self, request, pk=None):
+        try:
+            group = ProjectGroup.objects.get(id=pk, creator=request.user)
+        except:
+            return Response({'message':'invalid request'}, status=status.HTTP_400_BAD_REQUEST)
+        members = group.members.all()
+        members_list = []
+        for member in members:
+            partial = {
+            'id':member.id,
+            'email':member.email,
+            'proffession':[proffession.proffession_name for proffession in member.proffession.all()],
+            'name':member.name,
+            'surname':member.surname,
+            }
+            members_list.append(partial)
+        return Response(members_list)
