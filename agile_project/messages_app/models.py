@@ -2,6 +2,7 @@ from django.db import models
 from enum import Enum
 
 from users_app.models import User
+from django.utils.timezone import now
 
 # messages_app #
 # models: wiadomosc, zalacznik, zasob, (E)rodzaj_zasobu
@@ -24,7 +25,7 @@ class Message(models.Model):
     #break circular dependency
     title = models.CharField(max_length=50)
     content = models.TextField(max_length=2048)
-    sent_date = models.DateTimeField(auto_now_add=True)
+    sent_date = models.DateTimeField(default=now, editable=True)
     attached_note = models.ForeignKey(Note, models.SET_NULL, blank=True, null=True)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='message_sender')
     readen = models.BooleanField(default=False)

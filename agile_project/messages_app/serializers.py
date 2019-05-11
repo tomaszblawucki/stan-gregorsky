@@ -10,14 +10,32 @@ from datetime import datetime, timedelta, timezone
 
 class ConversationSerializer(serializers.ModelSerializer):
 
+    def format_date(self, sent_date):
+        # date = 'Today' if sent_date - datetime.now(timezone.utc) >= timedelta(days = -1) else f'{year}{month}{day}'
+        time_zero = datetime.now(timezone.utc)
+        time_zero = time_zero.replace(hour=0, minute=0, second=0, microsecond=0)
+        delta = sent_date - time_zero
+        if delta.days == 0:
+            date = 'Today'
+        elif delta.days == -1:
+            date = 'Yesterday'
+        else:
+            year = '' if sent_date.year - datetime.now(timezone.utc).year >= 0 else sent_date.strftime("%Y ")
+            month = sent_date.strftime("%B ")
+            day = sent_date.strftime("%d")
+            date = f'{year}{month}{day}'
+        return date
+
     def get_conversation(self, addressee_pk, user_pk):
-        messages = Message.objects.filter(addressee=addressee_pk, sender=user_pk, notification=False) | \
-                   Message.objects.filter(addressee=user_pk, sender=addressee_pk, notification=False)
+        messages = (Message.objects.filter(addressee=addressee_pk, sender=user_pk, notification=False) | \
+                   Message.objects.filter(addressee=user_pk, sender=addressee_pk, notification=False)).order_by('-sent_date')
         conversation = []
         partial = {}
         for message in messages:
             addressee = message.addressee.first()
             sender = message.sender
+            date = self.format_date(message.sent_date)
+            time = message.sent_date.strftime("%H:%M")
             partial = {
                 'owner':message.sender.id == user_pk,
                 'content':message.content,
@@ -26,9 +44,9 @@ class ConversationSerializer(serializers.ModelSerializer):
                 'addressee':addressee.email,
                 'addresse_id':addressee.id,
                 'readen':message.readen,
-                'datetime': message.sent_date.strftime("%Y-%m-%d %H:%M") \
-                    if message.sent_date - datetime.now(timezone.utc)  < timedelta(days = -1) \
-                    else message.sent_date.strftime("%H:%M:%S")
+                'datetime':message.sent_date,
+                'date': date,
+                'time': time,
             }
             conversation.append(partial)
         return conversation
@@ -53,14 +71,21 @@ class ConversationSerializer(serializers.ModelSerializer):
         response = []
         for addr, msg in zip(recent_addressee_list, recent_messages_list):
             target_user=User.objects.get(id=addr)
+            date = self.format_date(msg.sent_date)
+            time = msg.sent_date.strftime("%H:%M")
             partial = {
             'target_user':target_user.id,
             'target_user_email':target_user.email,
             'content':msg.content,
             'readen':msg.readen,
             'datetime':msg.sent_date,
+            'date':date,
+            'time':time,
             }
             response.append(partial)
+        print(response)
+        response.sort(key=lambda x: x['datetime'], reverse=True)
+        print(response)
         # recent_messages = Message.objects.get(Q(addressee=user) | Q(sender=user))
         return response
 
@@ -68,12 +93,17 @@ class ConversationSerializer(serializers.ModelSerializer):
         notifications = Message.objects.filter( (Q(addressee=user) | Q(sender=user)) & Q(notification=True) ).order_by('-sent_date')
         notification_list = []
         for notif in notifications:
+            date = self.format_date(notif.sent_date)
+            time = notif.sent_date.strftime("%H:%M")
             partial = {
             'creator':notif.sender.id,
             'creator_email':notif.sender.email,
             'content':notif.content,
             'datetime':notif.sent_date,
             'readen':notif.readen,
+            'date':date,
+            'time':time,
+            'notification':notif.notification,
             }
             notification_list.append(partial)
         return notification_list

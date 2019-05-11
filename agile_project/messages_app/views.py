@@ -21,8 +21,8 @@ class ConversationView(viewsets.ViewSet):
             print(e)
             return Response({'message':'addressee not found.'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = ConversationSerializer(data=request.data)
-        response = serializer.get_conversation(addressee.pk, request.user.pk)
         serializer.mark_as_readen(addressee=request.user, sender=addressee)
+        response = serializer.get_conversation(addressee.pk, request.user.pk)
         return Response(response)
 
     def get_recent_messages(self, request):
