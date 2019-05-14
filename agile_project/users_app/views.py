@@ -22,18 +22,11 @@ utc = pytz.UTC
 
 '''
 TO DO:
-- Lista wszystkich użytkowników
-- Lista użytkowników filtrowana po specjalizacji, stażu, grupie itd
-- Dane szczegółowe zalogowanego użytkownika
+- Lista wszystkich użytkowników OK
+! Lista użytkowników filtrowana po specjalizacji, stażu, grupie itd
+- Dane szczegółowe zalogowanego użytkownika OK
 - Zaimplementuj AuthToken (ostatnio zalogowano..) https://www.django-rest-framework.org/api-guide/authentication/
 '''
-
-
-class HomeView(APIView):
-    permission_classes = (IsAuthenticated, AuthorOnly)
-    def get(self, request):
-        content = {'message':'HOME VIEW'}
-        return Response(content)
 
 class RegisterView(APIView):
 
@@ -50,7 +43,7 @@ class UsersViewSet(viewsets.ViewSet):
     # queryset = User.objects.all()
 
     def list(self, request):
-        queryset = User.objects.all().values('id', 'email')
+        queryset = User.objects.all().values('id', 'email', 'name', 'surname')
         # serializer = UserSerializer(queryset, many=True, allow_null=True)
         # print(serializer.data)
         return Response(queryset)
@@ -126,16 +119,7 @@ class ResetPasswordView(APIView):
                     return Response({'error': f'{e}'}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({'error':'Reset code has expired'}, status=status.HTTP_400_BAD_REQUEST)
-
-
         except ObjectDoesNotExist:
             return Response({'error':'Invalid reset code'})
         except MultipleObjectsReturned:
             return Response({'error':'Internal Server Error'})
-
-
-class DummyView(APIView):
-
-    def get(self, requeest):
-        content = {'message': 'Siergiej działa!'}
-        return Response(content)

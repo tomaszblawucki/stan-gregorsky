@@ -8,12 +8,10 @@ users_list = views.UsersViewSet.as_view({'get':'list'})
 user_personal = views.UsersViewSet.as_view({'get':'get_user_info'})
 
 urlpatterns = [
-    path('', views.HomeView.as_view(), name='users_home'),
     path('get-token/', obtain_auth_token, name='get_token_api'),
     path('register/', views.RegisterView.as_view(), name='register_user'),
     path('forgot-password/', views.ForgotPasswordView.as_view(), name='forgot_password'),
     path('reset-password/', views.ResetPasswordView.as_view(), name='reset_password'),
-    path('dummy/', views.DummyView.as_view(), name='dummy'),
     path('list/', users_list, name='users_list'),
     path('personal/', user_personal, name='user_personal')
 ]

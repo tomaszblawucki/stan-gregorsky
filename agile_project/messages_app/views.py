@@ -53,6 +53,8 @@ class ContactsList(viewsets.ViewSet):
                     {
                     'id':contact.id,
                     'email':contact.email,
+                    'name':contact.name,
+                    'surname':contact.surname,
                     'proffession':[proffession.proffession_name for proffession in contact.proffession.all()],
                     'name':contact.name,
                     'surname':contact.surname,

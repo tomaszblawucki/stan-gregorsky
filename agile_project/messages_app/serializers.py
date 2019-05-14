@@ -28,7 +28,7 @@ class ConversationSerializer(serializers.ModelSerializer):
 
     def get_conversation(self, addressee_pk, user_pk):
         messages = (Message.objects.filter(addressee=addressee_pk, sender=user_pk, notification=False) | \
-                   Message.objects.filter(addressee=user_pk, sender=addressee_pk, notification=False)).order_by('-sent_date')
+                   Message.objects.filter(addressee=user_pk, sender=addressee_pk, notification=False)).order_by('sent_date')
         conversation = []
         partial = {}
         for message in messages:
@@ -76,6 +76,8 @@ class ConversationSerializer(serializers.ModelSerializer):
             partial = {
             'target_user':target_user.id,
             'target_user_email':target_user.email,
+            'target_user_name':target_user.name,
+            'target_user_surname':target_user.surname,
             'content':msg.content,
             'readen':msg.readen,
             'datetime':msg.sent_date,
@@ -98,6 +100,8 @@ class ConversationSerializer(serializers.ModelSerializer):
             partial = {
             'creator':notif.sender.id,
             'creator_email':notif.sender.email,
+            'creator_name':notif.sender.name,
+            'creator_surname':notif.sender.surname,
             'content':notif.content,
             'datetime':notif.sent_date,
             'readen':notif.readen,

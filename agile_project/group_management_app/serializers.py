@@ -3,6 +3,10 @@ from rest_framework.serializers import ValidationError
 
 from users_app.models import User
 from .models import GroupMember, ProjectGroup, ProjectGroupStatus
+from datetime import datetime
+import pytz
+
+utc=pytz.UTC
 
 
 class ProjectGroupSerializerForCreate(serializers.ModelSerializer):
@@ -44,19 +48,32 @@ class ProjectGroupSerializerForList(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectGroup
-        fields = ('pk', 'group_name', 'project_name', 'project_description', 'planned_start_date')
+        fields = ('pk', 'group_name', 'project_name', 'project_description', 'planned_start_date', 'planned_end_date')
 
 class ProjectGroupSerializerForUpdate(serializers.ModelSerializer):
 
-    def validate(self, data):
-        if data.planned_start_date >= data.planned_end_date:
+    def sanitize_data(self, data, group_obj):
+        start_date = data.get('planned_start_date', group_obj.planned_start_date)
+        end_date = data.get('planned_end_date', group_obj.planned_end_date)
+        if not (start_date and end_date):
+            return data
+        try:
+            start_date = utc.localize(datetime.strptime(start_date, '%Y-%m-%d %H:%M'))
+        except Exception as e:
+            print(e)
+        try:
+            end_date = utc.localize(datetime.strptime(end_date, '%Y-%m-%d %H:%M'))
+        except Exception as e:
+            print(e)
+        if start_date >= end_date:
             raise ValidationError('start date cannot be greater than end date')
         return data
 
     def update(self, validated_data, user, pk):
         group_obj = ProjectGroup.objects.get(pk=pk, creator=user)
+        self.sanitize_data(validated_data, group_obj)
         if group_obj.status == 'CLOSED':
-            raise ValidationError('Cannot edit already closed project group, You have to reactivate it first')
+            raise ValidationError('Cannot edit already closed project group. You have to reopen it first')
         group_name = validated_data.get('group_name', group_obj.group_name)
         project_name = validated_data.get('project_name', group_obj.project_name)
         project_description = validated_data.get('project_description', group_obj.project_description)

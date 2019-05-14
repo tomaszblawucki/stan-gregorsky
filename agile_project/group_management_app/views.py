@@ -148,7 +148,7 @@ class ProjectGroupView(viewsets.ViewSet):
         try:
             group = ProjectGroup.objects.get(id=pk, creator=request.user)
         except:
-            return Response({'message':'invalid request'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message':'invalid request or insuficient priviledges'}, status=status.HTTP_400_BAD_REQUEST)
         members = group.members.all()
         members_list = []
         for member in members:
