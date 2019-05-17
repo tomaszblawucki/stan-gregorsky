@@ -13,7 +13,7 @@ from .models import Task, TaskStatus
 class ProjectManagerPermission():
     def project_manager_only(self, request):
         from users_app.models import UserRoles
-        if request.user.role is not UserRoles.MAN:
+        if UserRoles[request.user.role] is not UserRoles.MAN:
             raise PermissionDenied()
         return True
 
@@ -22,7 +22,7 @@ class CreateTask(APIView, ProjectManagerPermission):
     permission_classes = (IsAuthenticated,)#, ProjectManagerOnly) #is_project_manager)
 
     def post(self, request):
-        self.project_manager_only(self, request)
+        self.project_manager_only(request)
         serializer = TaskSerializer(data=request.data)
         if serializer.is_valid():
             serializer.create(request.user, request.data)

@@ -2,4 +2,9 @@ from django.urls import path
 
 from . import views
 
-urlpatterns = []
+event_create = views.EventsViewSet.as_view({'post':'create'})
+
+
+urlpatterns = [
+    path('create/', event_create, name='event_create')
+]

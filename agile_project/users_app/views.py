@@ -85,7 +85,7 @@ class ForgotPasswordView(APIView):
                     'Your reset password token',
                     f'Please go to your application and assign new password to your account {reset_token}',
                     'agile_app@company.com',
-                    ['tomasz13191@gmail.com'],# change to user email-username
+                    ['stan.gregorsky@gmail.com'],# change to user email-username
                     fail_silently=False)
                 if not has_token:
                     token_obj = ResetPasswordToken(email=email, token=reset_token)
