@@ -24,3 +24,6 @@ class Task(models.Model):
     creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='task_creator')
     project_group = models.ForeignKey(ProjectGroup, on_delete=models.CASCADE, null=True)
     assigned_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f'title:{self.title} | desc:{self.description[:20]}... | status:{self.status} | assigned_user:{self.assigned_user.email} | project:{self.project_group.project_name}'

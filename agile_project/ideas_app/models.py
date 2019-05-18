@@ -18,6 +18,9 @@ class Note(models.Model):
         related_name='note_attachment',
         blank=True)
 
+    def __str__(self):
+        return f'{self.title} | {self.owner} | {self.created_at}'
+
 class NoteAttachment(models.Model):
     note = models.ForeignKey(Note, on_delete=models.CASCADE)
     attachment = models.ForeignKey(Attachment, on_delete=models.CASCADE)

@@ -39,11 +39,14 @@ class Message(models.Model):
         blank=True)
 
     def __str__(self):
-        return f'{self.sent_date} | {self.sender} | {self.addressee.all()} | {self.content} | {self.readen}'
+        return f'{self.sent_date} | {self.sender} | {self.addressee.all()} | {self.content} | {self.readen} | NOTIFICATION:{self.notification}'
 
 class MessageAddressee(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
     addressee = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'message_id:{self.message.id} | content:{self.message.content[:25]}... | readen:{self.message.readen} | addressee:{self.addressee.email}'
 
 
 class MessageAttachment(models.Model):
