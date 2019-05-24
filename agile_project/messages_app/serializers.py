@@ -104,7 +104,6 @@ class ConversationSerializer(serializers.ModelSerializer):
             'creator_surname':notif.sender.surname,
             'content':notif.content,
             'datetime':notif.sent_date,
-            'readen':notif.readen,
             'date':date,
             'time':time,
             'notification':notif.notification,

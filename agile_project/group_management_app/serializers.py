@@ -48,7 +48,7 @@ class ProjectGroupSerializerForList(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectGroup
-        fields = ('pk', 'group_name', 'project_name', 'project_description', 'planned_start_date', 'planned_end_date')
+        fields = ('pk', 'group_name', 'project_name', 'project_description', 'planned_start_date', 'planned_end_date', 'status')
 
 class ProjectGroupSerializerForUpdate(serializers.ModelSerializer):
 
