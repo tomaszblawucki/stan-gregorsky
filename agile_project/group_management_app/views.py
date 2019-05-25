@@ -27,18 +27,19 @@ class ProjectGroupView(viewsets.ViewSet):
         return Response(serializer.data)
 
     def list_my_groups(self, request):# groups created by PM / groups which is member
-        pm_mode = request.data.get('as_manager', False)
-        if pm_mode and request.user.role == 'MAN': #if user is Project Manager
+        response = {}
+        if request.user.role == 'MAN': #if user is Project Manager
             queryset = ProjectGroup.objects.filter(creator=request.user)
             serializer = serializers.ProjectGroupSerializerForList(data=queryset, many=True)
             serializer.is_valid()
-            return Response(serializer.data)
-        else:
-            queryset = ProjectGroup.objects.filter(members=request.user.id)
-            serializer = serializers.ProjectGroupSerializerForList(data=queryset, many=True)
-            serializer.is_valid()
-            return Response(serializer.data)
-        return Response({'message':'Invalid request'}, status=status.HTTP_400_BAD_REQUEST)
+            response['AS MANAGER'] = serializer.data
+        queryset = ProjectGroup.objects.filter(members=request.user.id).exclude(creator=request.user.id)
+        serializer = serializers.ProjectGroupSerializerForList(data=queryset, many=True)
+        serializer.is_valid()
+        # return Response(serializer.data)
+        response['AS PARTICIPANT'] = serializer.data
+        return Response(response)
+        # return Response({'message':'Invalid request'}, status=status.HTTP_400_BAD_REQUEST)
 
     def add_members(self, request, pk=None):
         try:
@@ -122,9 +123,9 @@ class ProjectGroupView(viewsets.ViewSet):
             return Response({'message':'Group not found'}, status=status.HTTP_404_NOT_FOUND)
         if request.user.role != 'MAN' or request.user != group_obj.creator:
             return Response({'message':'Action not permitted'}, status=status.HTTP_403_FORBIDDEN)
-        if group_obj.status == 'CLOSED':
+        if group_obj.status == ProjectGroupStatus.CLOSED:
             return Response({'message':'Group already closed'}, status.HTTP_403_FORBIDDEN)
-        group_obj.status = 'CLOSED'
+        group_obj.status = ProjectGroupStatus.CLOSED
         group_obj.save()
         return Response({'message':'Group closed'})
 
@@ -135,14 +136,11 @@ class ProjectGroupView(viewsets.ViewSet):
             return Response({'message':'Group not found'}, status=status.HTTP_404_NOT_FOUND)
         if request.user.role != 'MAN' or request.user != group_obj.creator:
             return Response({'message':'Action not permitted'}, status=status.HTTP_403_FORBIDDEN)
-        if group_obj.status == 'ACTIVE':
+        if group_obj.status == ProjectGroupStatus.ACTIVE:
             return Response({'message':'Group is already active'}, status.HTTP_403_FORBIDDEN)
-        group_obj.status = 'ACTIVE'
+        group_obj.status = ProjectGroupStatus.ACTIVE
         group_obj.save()
         return Response({'message':'Group re-opened'})
-
-    def retrieve(self, request, pk=None):
-        pass
 
     def get_group_members(self, request, pk=None):
         try:

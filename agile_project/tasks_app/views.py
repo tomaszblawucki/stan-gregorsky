@@ -8,6 +8,7 @@ from rest_framework.permissions import BasePermission, IsAuthenticated
 
 from .serializers import TaskSerializer
 from .models import Task, TaskStatus
+from group_management_app.models import ProjectGroup
 
 
 class ProjectManagerPermission():
@@ -103,14 +104,21 @@ class ListTasks(viewsets.ViewSet, ProjectManagerPermission):
         task_obj.save()
         return Response({'message': 'Task status updated successfuly'})
 
-    # def assign_to_project(self, request, pk=None):
-    #     self.project_manager_only(request)
-    #     try:
-    #         task_obj = Task.objects.get(pk=pk)
-    #     except:
-    #         return Response({'message': 'Task not found.'},
-    #                          status=status.HTTP_404_NOT_FOUND)
-    #     return Response('{message: assign to group}')
+    def assign_to_group(self, request, pk=None):
+        self.project_manager_only(request)
+        try:
+            task_obj = Task.objects.get(pk=pk)
+        except:
+            return Response({'message': 'Task not found.'},
+                             status=status.HTTP_404_NOT_FOUND)
+        try:
+            group_obj = ProjectGroup.objects.get(pk=request.data['group_id'])
+        except:
+            return Response({'message':'Project group with specified id not found'},
+                             status=status.HTTP_404_NOT_FOUND)
+        task_obj.project_group = group_obj
+        task_obj.save()
+        return Response({'message': f'task {task_obj.id} assigned to group {group_obj.group_name}'})
 
     def assign_to_user(self, request, pk=None):
         from users_app.models import User, UserRoles

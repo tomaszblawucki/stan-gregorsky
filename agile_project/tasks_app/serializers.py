@@ -19,7 +19,6 @@ class TaskSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('start date cannot be greater than planned end date')
         return data
 
-
     def validate(self, data):
         if data['start_date'] > data['end_date']:
             raise serializers.ValidationError('start date cannot be greater than planned end date')
@@ -31,20 +30,25 @@ class TaskSerializer(serializers.ModelSerializer):
         start_date = validated_data.get('start_date')
         end_date = validated_data.get('end_date')
         assigned_user = validated_data.get('assigned_user')
-        project_group = validated_data.get('project_group')
+        project_group = validated_data.get('group_id')
+        if assigned_user:
+            try:
+                assigned_user = User.objects.get(pk=assigned_user)
+            except:
+                raise serializers.ValidationError('target user does not exist')
+        if project_group:
+            try:
+                project_group = ProjectGroup.objects.get(pk=project_group)
+            except:
+                raise serializers.ValidationError('target group does not exist')
         task_obj = Task.objects.create(
             title=title,
             description=description,
             start_date=start_date,
             end_date=end_date,
-            creator=creator,
-            )
-        if assigned_user:
-            assigned_user = User.objects.get(pk=assigned_user)
-            task_obj.assigned_user = assigned_user
-        if project_group:
-            project_group = ProjectGroup.objects.get(pk=project_group)
-            task_obj.project_group = project_group
+            creator=creator)
+        task_obj.assigned_user = assigned_user
+        task_obj.project_group = project_group
         task_obj.save()
 
     def update(self, data, pk):
