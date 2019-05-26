@@ -46,9 +46,14 @@ class ProjectGroupSerializerForCreate(serializers.ModelSerializer):
 
 class ProjectGroupSerializerForList(serializers.ModelSerializer):
 
+    participants_count = serializers.SerializerMethodField()
+
     class Meta:
         model = ProjectGroup
-        fields = ('pk', 'group_name', 'project_name', 'project_description', 'planned_start_date', 'planned_end_date', 'status')
+        fields = ('pk', 'group_name', 'project_name', 'project_description', 'planned_start_date', 'planned_end_date', 'status', 'participants_count')
+
+    def get_participants_count(self, obj):
+        return obj.members.count()
 
 class ProjectGroupSerializerForUpdate(serializers.ModelSerializer):
 
@@ -72,7 +77,7 @@ class ProjectGroupSerializerForUpdate(serializers.ModelSerializer):
     def update(self, validated_data, user, pk):
         group_obj = ProjectGroup.objects.get(pk=pk, creator=user)
         self.sanitize_data(validated_data, group_obj)
-        if group_obj.status == ProjectGroup.CLOSED:
+        if group_obj.status == ProjectGroupStatus.CLOSED.value:
             raise ValidationError('Cannot edit already closed project group. You have to reopen it first')
         group_name = validated_data.get('group_name', group_obj.group_name)
         project_name = validated_data.get('project_name', group_obj.project_name)

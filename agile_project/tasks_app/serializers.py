@@ -60,9 +60,9 @@ class TaskSerializer(serializers.ModelSerializer):
             task_obj.start_date = validated_data.get('start_date', task_obj.start_date)
             task_obj.end_date = validated_data.get('end_date', task_obj.end_date)
             task_status = validated_data.get('task_status', task_obj.status)
-            if task_status not in TaskStatus.__members__:
+            if task_status not in [stat.value for stat in TaskStatus]:
                 raise serializers.ValidationError('invalid task status value')
-            task_obj.status = TaskStatus[task_status]
+            task_obj.status = TaskStatus[task_status].value
             if validated_data.get('assigned_user', False):
                 try:
                     assigned_user = User.objects.get(pk=validated_data['assigned_user'])

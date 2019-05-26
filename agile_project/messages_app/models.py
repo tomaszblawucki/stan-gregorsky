@@ -17,7 +17,7 @@ class Attachment(models.Model):
     size = models.BigIntegerField()
     type = models.CharField(max_length=25,
     choices=[(tag.name, tag.value) for tag in ResourceType],
-    default = ResourceType.GRAPH)
+    default = ResourceType.GRAPH.value)
 
 
 class Message(models.Model):

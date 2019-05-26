@@ -43,7 +43,7 @@ class UsersViewSet(viewsets.ViewSet):
     # queryset = User.objects.all()
 
     def list(self, request):
-        queryset = User.objects.all().values('id', 'email', 'name', 'surname')
+        queryset = User.objects.all().values('id', 'email', 'name', 'surname', 'role')
         # serializer = UserSerializer(queryset, many=True, allow_null=True)
         # print(serializer.data)
         return Response(queryset)

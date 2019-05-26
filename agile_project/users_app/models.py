@@ -66,8 +66,6 @@ class Proffession(models.Model):
         return self.proffession_name
 
 
-
-
 class User(AbstractBaseUser):
 
     username = None
@@ -79,9 +77,9 @@ class User(AbstractBaseUser):
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
     active = models.BooleanField(default=True) #status użytkownika
-    role = models.CharField(max_length=15,
-                            choices=[(tag.name, tag.value) for tag in UserRoles],
-                            default=UserRoles.REG) #Rola użytkownika w systemie (Uprawnienia)
+    role = models.CharField(max_length=30,
+                            choices=[(tag.value, tag.value) for tag in UserRoles],
+                            default=UserRoles.REG.value) #Rola użytkownika w systemie (Uprawnienia)
     proffession = models.ManyToManyField(Proffession)#Specjalność
 
     USERNAME_FIELD = 'email'

@@ -4,6 +4,10 @@ from enum import Enum
 from users_app.models import User
 from messages_app.models import Attachment
 
+import pytz
+
+utc=pytz.UTC
+
 # events_app #
 #models: Wydarzenie, pomysł, ocena_pomysłu, komentarz
 # (E)typ_wydarzenia, (E)status_wydarzenia
@@ -11,6 +15,8 @@ from messages_app.models import Attachment
 
 class EventStatus(Enum):
     INIT = 'Initialized'
+    RUNNING = 'In progress'
+    CLOSED = 'Closed'
 # TO DO
 
 class EventType(Enum):
@@ -27,16 +33,36 @@ class Event(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(default=None, blank=True, null=True)
-    status = models.CharField(max_length=10,
-                              choices = [(tag.name, tag.value) for tag in EventStatus],
-                              default = EventStatus.INIT)
-    type = models.CharField(max_length=10,
-                            choices = [(tag.name, tag.value) for tag in EventType],
-                            default = EventType.BST)
+    status = models.CharField(max_length=15,
+                              choices = [(tag.value, tag.value) for tag in EventStatus],
+                              default = EventStatus.INIT.value)
+    type = models.CharField(max_length=15,
+                            choices = [(tag.value, tag.value) for tag in EventType],
+                            default = EventType.BST.value)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='event_creator')#FK
     participants = models.ManyToManyField(User,
         through='EventParticipant',
         through_fields=('event', 'user'))
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if (self.start_date and self.end_date):
+            try:
+                planned_start_date = utc.localize(self.start_date)
+            except:
+                planned_start_date = self.start_date
+            try:
+                planned_end_date = utc.localize(self.end_date)
+            except:
+                planned_end_date = self.end_date
+            if planned_start_date >= planned_end_date:
+                raise ValidationError('start date cannot be greater than end date')
+        if self.status not in [e.value for e in EventStatus]:
+            raise ValidationError(f'invalid status value, valid values are {[tag.value for tag in EventStatus]}')
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super(Event, self).save(*args, **kwargs)
 
 class EventIdea(models.Model):
     name = models.CharField(max_length=50)

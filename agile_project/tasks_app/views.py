@@ -14,7 +14,9 @@ from group_management_app.models import ProjectGroup
 class ProjectManagerPermission():
     def project_manager_only(self, request):
         from users_app.models import UserRoles
-        if UserRoles[request.user.role] is not UserRoles.MAN:
+        print(request.user.role)
+        print(UserRoles.MAN.value)
+        if request.user.role != UserRoles.MAN.value:
             raise PermissionDenied()
         return True
 
@@ -98,9 +100,9 @@ class ListTasks(viewsets.ViewSet, ProjectManagerPermission):
                              status.HTTP_403_FORBIDDEN)
         items = request.data
         task_status = items.get('task_status', task_obj.status)
-        if task_status not in TaskStatus.__members__:
-            return Response({'message':'Invalid task status value'}, status=status.HTTP_400_BAD_REQUEST)
-        task_obj.status = TaskStatus[task_status]
+        if task_status not in [stat.value for stat in TaskStatus]:
+            return Response({'message':f'Invalid task status value, valid values {[stat.value for stat in TaskStatus]}'}, status=status.HTTP_400_BAD_REQUEST)
+        task_obj.status = task_status
         task_obj.save()
         return Response({'message': 'Task status updated successfuly'})
 
