@@ -120,6 +120,16 @@ class EventsViewSet(viewsets.ViewSet):
     def rate_idea(self, request):
         pass
 
+
+    def event_participants(self, request, pk=None):
+        try:
+            event_obj = Event.objects.get(pk=pk)
+        except:
+            return Response({'message':'Event does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = EventSerializer(data=request.data)
+        response = serializer.get_participants(event_obj)
+        return Response(response)
+
     @PermissionDecorators.manager_only
     def add_participants(self, request, pk=None):
         try:
@@ -134,7 +144,6 @@ class EventsViewSet(viewsets.ViewSet):
         except Exception as e:
             return Response({'message':str(e)}, status.HTTP_400_BAD_REQUEST)
         return Response({'message':'Participants added'})
-
 
     @PermissionDecorators.manager_only
     def remove_participants(self, request, pk=None):

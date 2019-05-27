@@ -20,8 +20,6 @@ class Proffessions(Enum):
     #Et cetera
 
 
-
-
 class UserManager(BaseUserManager):
 
     def create_user(self, email, password, name, surname, birth_date=None):

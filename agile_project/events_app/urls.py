@@ -16,6 +16,7 @@ quit_event = views.EventsViewSet.as_view({'get':'quit_event'})
 rate_idea = views.EventsViewSet.as_view({'post':'rate_idea'})
 add_participants = views.EventsViewSet.as_view({'post':'add_participants'})
 remove_participants = views.EventsViewSet.as_view({'post':'remove_participants'})
+list_participants = views.EventsViewSet.as_view({'get':'event_participants'})
 
 urlpatterns = [
     path('create/', event_create, name='event_create'),
@@ -32,4 +33,5 @@ urlpatterns = [
     path('rate-idea/', rate_idea, name='rate_idea'),
     path('<int:pk>/add-participants/', add_participants, name='add_participants'),
     path('<int:pk>/remove-participants/', remove_participants, name='remove_participants'),
+    path('<int:pk>/list-participants/', list_participants, name='list_participants')
 ]

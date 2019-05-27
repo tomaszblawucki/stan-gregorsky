@@ -119,6 +119,22 @@ class EventSerializer(serializers.ModelSerializer):
         else:
             raise ValidationError('Participants list cannot be empty')
 
+    def get_participants(self, event_obj):
+        participants = event_obj.participants.all()
+        response = {}
+        partial = {}
+        for p in participants:
+            p_proffessions = [prof.proffession_name for prof in p.proffession.all()]
+            print(p_proffessions)
+            partial[p.pk] = {
+                    'email':p.email,
+                    'name':p.name,
+                    'surname':p.surname,
+                    'professions':p_proffessions,
+                    'role':p.role,
+                }
+        response['participants'] = partial
+        return response
     class Meta:
         model = Event
 
