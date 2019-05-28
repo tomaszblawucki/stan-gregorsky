@@ -24,8 +24,8 @@ class EventType(Enum):
 # TO DO
 
 class RateValues(Enum):
-    GOOD = '1'
-    BAD = '-1'
+    GOOD = 1
+    BAD = -1
 
 class Event(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -69,6 +69,8 @@ class EventIdea(models.Model):
     description = models.TextField(blank=True, null=True, max_length=1024)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_edited = models.BooleanField(default=False)
+
 
 class Comment(models.Model):
     content = models.TextField(max_length=1024)
@@ -88,8 +90,7 @@ class CommentAttachment(models.Model):
 class EventIdeaRate(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     target_event_idea = models.ForeignKey(EventIdea, on_delete=models.CASCADE)
-    rate = models.CharField(max_length=1,
-        choices=[(tag.name, tag.value) for tag in RateValues])
+    rate = models.IntegerField(choices=[(tag.value, tag.value) for tag in RateValues])
 
 class EventParticipant(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

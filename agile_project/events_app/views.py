@@ -5,9 +5,10 @@ from rest_framework.permissions import BasePermission, IsAuthenticated
 from users_app.models import User, UserRoles
 from rest_framework.exceptions import PermissionDenied
 from .serializers import EventSerializerForCreate, EventSerializerForList,\
-                         EventSerializerForUpdate, EventSerializer
+                         EventSerializerForUpdate, EventSerializer, EventIdeaSerializerForCreate,\
+                         EventIdeaSerializerForUpdate, EventIdeaSerializerForList
 from users_app.models import User, UserRoles
-from .models import Event, EventStatus, EventParticipant
+from .models import Event, EventStatus, EventParticipant, EventIdea, EventIdeaRate, RateValues
 
 class PermissionDecorators:
     def manager_only(fcn):
@@ -48,9 +49,12 @@ class EventsViewSet(viewsets.ViewSet):
             return Response({'message':'Event does not exist'}, status=status.HTTP_404_NOT_FOUND)
         if event_obj.creator != request.user:
             return Response({'message':f'Only creator can edit event data'})
-        serializer = EventSerializerForUpdate(data=request.data)
+        data = data = request.data.dict()
+        if event_obj.name == request.data.get('name', None):
+            del data['name']
+        serializer = EventSerializerForUpdate(data=data)
         if serializer.is_valid():
-            serializer.update(request.data, event_obj)
+            serializer.update(data, event_obj)
             return Response({'message':'Event updated'})
         return Response({'message':f'{serializer.errors}'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -109,17 +113,94 @@ class EventsViewSet(viewsets.ViewSet):
         return Response(response)
 
     def add_idea(self, request):
-        pass
+        serializer = EventIdeaSerializerForCreate(data=request.data)
+        if serializer.is_valid():
+            try:
+                serializer.create(serializer.data, request.user)
+            except Exception as e:
+                return Response({'message':f'{e}'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message':'Idea added'})
+        else:
+            return Response({'message':serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    def update_idea(self, request, pk=None):
+        try:
+            idea_obj = EventIdea.objects.get(pk=pk)
+        except:
+            return Response({'message':'Idea does not exist'}, status.HTTP_404_NOT_FOUND)
+        if idea_obj.event.status != EventStatus.RUNNING.value:
+            return Response({'message':'Cannot edit idea in closed/initialized event'})
+        if request.user != idea_obj.creator:
+            return Response({'message':'Only creator can edit idea'}, status.HTTP_403_FORBIDDEN)
+        serializer = EventIdeaSerializerForUpdate(data=request.data)
+        if serializer.is_valid():
+            try:
+                serializer.update(request.data, idea_obj)
+            except Exception as e:
+                return Response({'message', str(e)}, status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'message':serializer.errors}, status.HTTP_400_BAD_REQUEST)
+        return Response({'message':'Idea updated'})
+
+    def list_event_ideas(self, request, pk=None):
+        try:
+            event_obj = Event.objects.get(pk=pk)
+        except:
+            return Response({'message':'event not found'}, status.HTTP_404_NOT_FOUND)
+        queryset = EventIdea.objects.filter(event=event_obj)
+        serializer = EventIdeaSerializerForList(data = queryset, many=True)
+        serializer.is_valid()
+        return Response({'IDEAS':serializer.data})
+
+    def rate_idea(self, request, pk=None):
+        try:
+            idea_obj = EventIdea.objects.get(pk=pk)
+        except:
+            return Response({'message':'idea not found'}, status.HTTP_404_NOT_FOUND)
+        if request.user not in [p for p in idea_obj.event.participants.all()]:
+            return Response({'message':'You have to be participant of corresponding event to rate ideas'}, status.HTTP_403_FORBIDDEN)
+        try:
+            rate = request.data.get('rate')
+        except:
+            return Response({'message':'rate field required'}, status.HTTP_400_BAD_REQUEST)
+        try:
+            rate = int(rate)
+        except:
+            return Response({'message':'invalid rate value'}, status.HTTP_400_BAD_REQUEST)
+        if rate not in [e.value for e in RateValues]:
+            return Response({'message':'rate value can be either `1` or `-1`'}, status.HTTP_400_BAD_REQUEST)
+        try:
+            rate_obj = EventIdeaRate.objects.get(creator=request.user, target_event_idea=idea_obj)
+            rate_obj.rate = rate
+            rate_obj.save()
+        except:
+            rate_obj = EventIdeaRate(
+                creator=request.user,
+                target_event_idea=idea_obj,
+                rate=rate)
+            rate_obj.save()
+        return Response({'message':'idea rated'})
 
     def add_comment(self, request):
         pass
 
-    def quit_event(self, request):
+    def edit_comment(self, request, pk=None):
         pass
 
-    def rate_idea(self, request):
+    def destroy_comment(self, request, pk=None):
         pass
 
+    def quit_event(self, request, pk=None):
+        try:
+            event_obj = Event.objects.get(pk=pk)
+        except:
+            return Response({'message':'Event does not exist'}, status.HTTP_404_NOT_FOUND)
+        try:
+            participant_obj = EventParticipant.objects.get(user=request.user, event=event_obj)
+        except:
+            return Response({'message':'participant not found'}, status.HTTP_404_NOT_FOUND)
+        participant_obj.delete()
+        return Response({'message':'you have left event'})
 
     def event_participants(self, request, pk=None):
         try:

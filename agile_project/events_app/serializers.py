@@ -57,15 +57,21 @@ class EventSerializerForUpdate(serializers.ModelSerializer):
     def update(self, validated_data, event_obj):
         if event_obj.status != EventStatus.INIT.value:
             raise ValidationError('Event have to have status => `initialized` for update')
-        event_name = validated_data.get('name', event_obj.name)
+        event_name = validated_data.get('name', None)
+        same_name = event_obj.name == event_name
+        print('IS SAME NAME? ', same_name)
         description = validated_data.get('description', event_obj.description)
         start_date = validated_data.get('start_date', event_obj.start_date)
         end_date = validated_data.get('end_date', event_obj.end_date)
         status = validated_data.get('status', event_obj.status)
         type = validated_data.get('type', event_obj.type)
         participants = validated_data.get('participants', None).split(',')
-
-        event_obj.name = event_name
+        try:
+            participants = User.objects.filter(id__in=set(participants))
+        except:
+            raise ValidationError('Invalid member id')
+        if not same_name and event_name:
+            event_obj.name = event_name
         event_obj.description = description
         event_obj.start_date = start_date
         event_obj.end_date = end_date
@@ -74,7 +80,8 @@ class EventSerializerForUpdate(serializers.ModelSerializer):
         try:
             event_obj.save()
         except Exception as e:
-            raise serializers.ValidationError(e.error_dict['__all__'][0].message)
+            print('ERROR')
+            raise serializers.ValidationError(str(e))
 
         if participants:
             for participant in participants:
@@ -86,6 +93,9 @@ class EventSerializerForUpdate(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ('name', 'description', 'start_date', 'end_date', 'status', 'type')
+        extra_kwargs = {
+            'name':{'required':False},
+            }
 
 class EventSerializer(serializers.ModelSerializer):
     def add_participants(self, request, event_obj):
@@ -137,6 +147,77 @@ class EventSerializer(serializers.ModelSerializer):
         return response
     class Meta:
         model = Event
+
+class EventIdeaSerializerForCreate(serializers.ModelSerializer):
+
+    def create(self, validated_data, user):
+        name = validated_data.get('name')
+        description = validated_data.get('description')
+        event_id = validated_data.get('event')
+        creator = user
+        try:
+            event = Event.objects.get(pk=event_id)
+        except:
+            raise ValidationError('Event does not exist')
+        if user not in [p.user for p in event.participants.all()]:
+            raise ValidationError('You have to be participant for this action')
+        if event.status != EventStatus.RUNNING.value:
+            raise ValidationError('You can add idea only in running event')
+        if user not in event.participants.all():
+            raise ValidationError('Only participants can add an idea to event')
+        if event.status != EventStatus.RUNNING.value:
+            raise ValidationError('You can add idea only for running events')
+        idea_obj = EventIdea(
+        name = name,
+        description = description,
+        event = event,
+        creator = creator)
+        idea_obj.save()
+
+    class Meta:
+        model = EventIdea
+        fields = ('name', 'description', 'event')
+
+
+class EventIdeaSerializerForUpdate(serializers.ModelSerializer):
+
+    def update(self, validated_data, idea_obj):
+        name = validated_data.get('name', idea_obj.name)
+        description = validated_data.get('description', idea_obj.description)
+        idea_obj.name = name
+        idea_obj.description = description
+        idea_obj.edited = True
+        idea_obj.save()
+
+    class Meta:
+        model = EventIdea
+        fields = ('name', 'description', 'event')
+        extra_kwargs = {
+            'event':{'required':False},
+            }
+
+class EventIdeaSerializerForList(serializers.ModelSerializer):
+    positive_rates = serializers.SerializerMethodField()
+    negative_rates = serializers.SerializerMethodField()
+    overall_score = serializers.SerializerMethodField()
+
+    def get_positive_rates(self, obj):
+        rate_cnt = EventIdeaRate.objects.filter(target_event_idea=obj, rate=1).count()
+        return rate_cnt
+
+    def get_negative_rates(self, obj):
+        rate_cnt = EventIdeaRate.objects.filter(target_event_idea=obj, rate=-1).count()
+        return rate_cnt
+
+    def get_overall_score(self, obj):
+        pos_rate_cnt = EventIdeaRate.objects.filter(target_event_idea=obj, rate=1).count()
+        neg_rate_cnt = EventIdeaRate.objects.filter(target_event_idea=obj, rate=-1).count()
+        return pos_rate_cnt - neg_rate_cnt
+
+    class Meta:
+        model = EventIdea
+        fields = ('pk', 'name', 'description', 'positive_rates', 'negative_rates', 'overall_score')
+
 
 class EventSerializerForList(serializers.ModelSerializer):
     participants_count = serializers.SerializerMethodField()
