@@ -65,8 +65,7 @@ class EventSerializerForUpdate(serializers.ModelSerializer):
         type = validated_data.get('type', event_obj.type)
         participants = validated_data.get('participants', None).split(',')
         present_participants = event_obj.participants.all()
-        participants = set(participants) - set([p.id for p in present_participants])
-        print(participants)
+        participants = set([int(p) for p  in participants]) - set([p.id for p in present_participants])
         try:
             participants = User.objects.filter(id__in=participants)
         except:
