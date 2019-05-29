@@ -58,8 +58,6 @@ class EventSerializerForUpdate(serializers.ModelSerializer):
         if event_obj.status != EventStatus.INIT.value:
             raise ValidationError('Event have to have status => `initialized` for update')
         event_name = validated_data.get('name', None)
-        same_name = event_obj.name == event_name
-        print('IS SAME NAME? ', same_name)
         description = validated_data.get('description', event_obj.description)
         start_date = validated_data.get('start_date', event_obj.start_date)
         end_date = validated_data.get('end_date', event_obj.end_date)
@@ -70,7 +68,7 @@ class EventSerializerForUpdate(serializers.ModelSerializer):
             participants = User.objects.filter(id__in=set(participants))
         except:
             raise ValidationError('Invalid member id')
-        if not same_name and event_name:
+        if event_name:
             event_obj.name = event_name
         event_obj.description = description
         event_obj.start_date = start_date
@@ -80,7 +78,6 @@ class EventSerializerForUpdate(serializers.ModelSerializer):
         try:
             event_obj.save()
         except Exception as e:
-            print('ERROR')
             raise serializers.ValidationError(str(e))
 
         if participants:

@@ -49,7 +49,7 @@ class EventsViewSet(viewsets.ViewSet):
             return Response({'message':'Event does not exist'}, status=status.HTTP_404_NOT_FOUND)
         if event_obj.creator != request.user:
             return Response({'message':f'Only creator can edit event data'})
-        data = data = request.data.dict()
+        data = request.data.dict()
         if event_obj.name == request.data.get('name', None):
             del data['name']
         serializer = EventSerializerForUpdate(data=data)
