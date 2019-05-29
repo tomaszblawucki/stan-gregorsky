@@ -64,8 +64,11 @@ class EventSerializerForUpdate(serializers.ModelSerializer):
         status = validated_data.get('status', event_obj.status)
         type = validated_data.get('type', event_obj.type)
         participants = validated_data.get('participants', None).split(',')
+        present_participants = event_obj.participants.all()
+        participants = set(participants) - set([p.id for p in present_participants])
+        print(participants)
         try:
-            participants = User.objects.filter(id__in=set(participants))
+            participants = User.objects.filter(id__in=participants)
         except:
             raise ValidationError('Invalid member id')
         if event_name:
