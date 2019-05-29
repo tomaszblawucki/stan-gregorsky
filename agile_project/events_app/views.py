@@ -49,7 +49,10 @@ class EventsViewSet(viewsets.ViewSet):
             return Response({'message':'Event does not exist'}, status=status.HTTP_404_NOT_FOUND)
         if event_obj.creator != request.user:
             return Response({'message':f'Only creator can edit event data'})
-        data = request.data.dict()
+        if type(request.data) == dict:
+            data = request.data
+        else:
+            data = request.data.dict()
         if event_obj.name == request.data.get('name', None):
             del data['name']
         serializer = EventSerializerForUpdate(data=data)
@@ -57,7 +60,6 @@ class EventsViewSet(viewsets.ViewSet):
             serializer.update(data, event_obj)
             return Response({'message':'Event updated'})
         return Response({'message':f'{serializer.errors}'}, status=status.HTTP_400_BAD_REQUEST)
-
 
     @PermissionDecorators.manager_only
     def event_info(self, request, pk=None):
@@ -93,11 +95,9 @@ class EventsViewSet(viewsets.ViewSet):
         event_obj.save()
         return Response({'message':'Event status updated to `In progress`'})
 
-
     @PermissionDecorators.manager_only
     def reopen_event(self, request, pk=None):
         return Response({'message':'Not done yet'}, status.HTTP_501_NOT_IMPLEMENTED)
-
 
     def my_events(self, request):
         response = {}
