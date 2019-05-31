@@ -1,0 +1,2291 @@
+{
+	"info": {
+		"_postman_id": "7fb84222-0b6c-426f-b15d-7a1696de21c8",
+		"name": "agile app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "users_app.register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "man2@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "passwd123",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "empty",
+							"type": "text"
+						},
+						{
+							"key": "surname",
+							"value": "concorda",
+							"type": "text"
+						},
+						{
+							"key": "birth_date",
+							"value": "2000-10-12",
+							"type": "text"
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/users/register/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"register",
+						""
+					]
+				},
+				"description": "register user request"
+			},
+			"response": []
+		},
+		{
+			"name": "users_app.login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "tom@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "passwd",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/users/get-token/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"get-token",
+						""
+					]
+				},
+				"description": "auth token aquire"
+			},
+			"response": []
+		},
+		{
+			"name": "users_app.users_list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86",
+						"type": "text"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8000/users/list/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"list",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users_app.personal_info",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Token 9717b81aae88714054ae86c4a2c06ca0b6be8034",
+						"type": "text"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8000/users/personal/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"personal",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tasks-create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "first task",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "first task desc",
+							"type": "text"
+						},
+						{
+							"key": "start_date",
+							"value": "2019-03-08 12:30",
+							"type": "text"
+						},
+						{
+							"key": "end_date",
+							"value": "2019-05-12 12:00",
+							"type": "text"
+						},
+						{
+							"key": "group_id",
+							"value": "12",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/tasks/create/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"tasks",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tasks-list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582",
+						"type": "text"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8000/tasks/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"tasks",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tasks_app.change_status",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "task_status",
+							"value": "in progress",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/tasks/2/change-status/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"tasks",
+						"2",
+						"change-status",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tasks_app.destroy",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/tasks/1/destroy/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"tasks",
+						"1",
+						"destroy",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tasks_app.assign_user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_id",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/tasks/2/assign-user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"tasks",
+						"2",
+						"assign-user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tasks_app.assign_to_group",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "group_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/tasks/2/assign-to-group/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"tasks",
+						"2",
+						"assign-to-group",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "messages_app.create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "content",
+							"value": "message in the bottle",
+							"type": "text"
+						},
+						{
+							"key": "addressee",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "notification",
+							"value": "Nothing",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "title",
+							"value": "None",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/messages/create/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"messages",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "messages_app.create Copy",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token 4a660b6abfaef47a2190ce528081fcd90aca4ba9",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "NOT NOTIF TEST",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "from test to tom #1",
+							"type": "text"
+						},
+						{
+							"key": "addressee",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "notification",
+							"value": "Nothing",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/messages/create/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"messages",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "messages_app.get_conversation",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/messages/conversation/1/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"messages",
+						"conversation",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "messages_app.recent_messages",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/messages/recent/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"messages",
+						"recent",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "messages_app.notifications",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/messages/notifications/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"messages",
+						"notifications",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "messages_app.get_contacts",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/messages/contacts/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"messages",
+						"contacts",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "messages_app.get_message",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token b49e1693b31ea3415255a9a6fac4559139ea18d7"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/messages/12/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"messages",
+						"12",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "group_management/list_my_groups",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/group_management/list/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"group_management",
+						"list",
+						""
+					]
+				},
+				"description": "show groups created by PM/show groups where user is member\nperameter as_manager is required for first option"
+			},
+			"response": []
+		},
+		{
+			"name": "group_management/group_members",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "as_manager",
+							"value": " asda",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/group_management/1/members/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"group_management",
+						"1",
+						"members",
+						""
+					]
+				},
+				"description": "show groups created by PM/show groups where user is member\nperameter as_manager is required for first option"
+			},
+			"response": []
+		},
+		{
+			"name": "group_management/create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "group_name",
+							"value": "CREATED BY TOM",
+							"type": "text"
+						},
+						{
+							"key": "project_name",
+							"value": "Master degree project",
+							"type": "text"
+						},
+						{
+							"key": "project_description",
+							"value": "some stuff goes there",
+							"type": "text"
+						},
+						{
+							"key": "creation_date",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "planned_start_date",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "planned_end_date",
+							"value": "2019-09-10 12:30",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "members",
+							"value": "1,2,3,4,5",
+							"type": "text"
+						},
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/group_management/create/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"group_management",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "group_management/update",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "group_name",
+							"value": "group update",
+							"type": "text"
+						},
+						{
+							"key": "project_name",
+							"value": "Super dupper project updated",
+							"type": "text"
+						},
+						{
+							"key": "project_description",
+							"value": "There wil be updated description",
+							"type": "text"
+						},
+						{
+							"key": "creation_date",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "planned_start_date",
+							"value": "2020-09-13 12:30",
+							"type": "text"
+						},
+						{
+							"key": "planned_end_date",
+							"value": "2020-09-10 12:30",
+							"type": "text"
+						},
+						{
+							"key": "status",
+							"value": "No status",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "members",
+							"value": "1,2,3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/group_management/1/update/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"group_management",
+						"1",
+						"update",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "group_management/add_members",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "group_name ",
+							"value": "New project group",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "project_name",
+							"value": "Master degree project",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "project_description",
+							"value": "some stuff goes there",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "creation_date",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "planned_start_date",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "planned_end_date",
+							"value": "2019-09-10 12:30",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "members",
+							"value": "1,2,3,4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/group_management/1/add_members/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"group_management",
+						"1",
+						"add_members",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "group_management/delete_members",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "group_name ",
+							"value": "New project group",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "project_name",
+							"value": "Master degree project",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "project_description",
+							"value": "some stuff goes there",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "creation_date",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "planned_start_date",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "planned_end_date",
+							"value": "2019-09-10 12:30",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "members",
+							"value": "1,2",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/group_management/1/delete_members/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"group_management",
+						"1",
+						"delete_members",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "group_management/close",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8000/group_management/1/close/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"group_management",
+						"1",
+						"close",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "group_management/reopen",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "group_name ",
+							"value": "New project group",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "project_name",
+							"value": "Master degree project",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "project_description",
+							"value": "some stuff goes there",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "creation_date",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "planned_start_date",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "planned_end_date",
+							"value": "2019-09-10 12:30",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "members",
+							"value": "1,2",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/group_management/1/reopen/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"group_management",
+						"1",
+						"reopen",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Tom's Event FOR UPDATE #2",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "first event ever no",
+							"type": "text"
+						},
+						{
+							"key": "start_date",
+							"value": "2019-10-11 12:12",
+							"type": "text"
+						},
+						{
+							"key": "end_date",
+							"value": "2019-10-10 12:12",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "Closed",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "participants",
+							"value": "1,2,3,4,5,6,7,8",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/create/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.update",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Edited event #2",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "first event ever no NEW",
+							"type": "text"
+						},
+						{
+							"key": "start_date",
+							"value": "2019-10-11 12:12",
+							"type": "text"
+						},
+						{
+							"key": "end_date",
+							"value": "2019-10-12 12:12",
+							"type": "text"
+						},
+						{
+							"key": "status",
+							"value": "In progress",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "participants",
+							"value": "5,6,5,6,5,6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/18/update/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"18",
+						"update",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.list_my_events",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Battle of brains seven",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "first event ever no",
+							"type": "text"
+						},
+						{
+							"key": "start_date",
+							"value": "2019-10-10 12:12",
+							"type": "text"
+						},
+						{
+							"key": "end_date",
+							"value": "2019-10-12 12:12",
+							"type": "text"
+						},
+						{
+							"key": "status",
+							"value": "shit",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "participants",
+							"value": "1,2,3,4,5,6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/my-events/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"my-events",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.destroy",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token 9717b81aae88714054ae86c4a2c06ca0b6be8034"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Battle of brains seven",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "first event ever no",
+							"type": "text"
+						},
+						{
+							"key": "start_date",
+							"value": "2019-10-10 12:12",
+							"type": "text"
+						},
+						{
+							"key": "end_date",
+							"value": "2019-10-12 12:12",
+							"type": "text"
+						},
+						{
+							"key": "status",
+							"value": "shit",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "participants",
+							"value": "1,2,3,4,5,6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/4/destroy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"4",
+						"destroy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.add_participants",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Battle of brains seven",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "description",
+							"value": "first event ever no",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "start_date",
+							"value": "2019-10-10 12:12",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "end_date",
+							"value": "2019-10-12 12:12",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "shit",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "participants",
+							"value": "1,2,3,4,5,6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/16/add-participants/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"16",
+						"add-participants",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.remove_participants",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Battle of brains seven",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "description",
+							"value": "first event ever no",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "start_date",
+							"value": "2019-10-10 12:12",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "end_date",
+							"value": "2019-10-12 12:12",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "shit",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "participants",
+							"value": "1,2,3,4,5,6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/18/remove-participants/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"18",
+						"remove-participants",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.list_participants",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Battle of brains seven",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "first event ever no",
+							"type": "text"
+						},
+						{
+							"key": "start_date",
+							"value": "2019-10-10 12:12",
+							"type": "text"
+						},
+						{
+							"key": "end_date",
+							"value": "2019-10-12 12:12",
+							"type": "text"
+						},
+						{
+							"key": "status",
+							"value": "shit",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "participants",
+							"value": "1,2,3,4,5,6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/18/list-participants/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"18",
+						"list-participants",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.add_idea",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "idea #1",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "first idea ever no",
+							"type": "text"
+						},
+						{
+							"key": "event",
+							"value": "16",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/add-idea/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"add-idea",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.add_comment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "content",
+							"value": "idea #1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/ideas/1/add-comment/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"ideas",
+						"1",
+						"add-comment",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.list_comments",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "content",
+							"value": "idea #1 EDITED",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/ideas/1/list-comments/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"ideas",
+						"1",
+						"list-comments",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.destroy_comment",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "content",
+							"value": "idea #1 EDITED",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/ideas/1/list-comments/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"ideas",
+						"1",
+						"list-comments",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.edit_comment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "content",
+							"value": "idea #1 EDITED",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/ideas/edit-comment/1/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"ideas",
+						"edit-comment",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.edit_idea",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Idea #1 edited",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "first idea edited",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/update-idea/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"update-idea",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.rate_idea",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "rate",
+							"value": "0001",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/rate-idea/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"rate-idea",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.list_ideas",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Idea #1 edited",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "first idea edited",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/16/list-ideas/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"16",
+						"list-ideas",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.quit",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Idea #1 edited",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "first idea edited",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/16/quit/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"16",
+						"quit",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

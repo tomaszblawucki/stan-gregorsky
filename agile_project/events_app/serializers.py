@@ -223,7 +223,7 @@ class EventIdeaSerializerForCreate(serializers.ModelSerializer):
             event = Event.objects.get(pk=event_id)
         except:
             raise ValidationError('Event does not exist')
-        if user not in [p.user for p in event.participants.all()]:
+        if user not in [p for p in event.participants.all()]:
             raise ValidationError('You have to be participant for this action')
         if event.status != EventStatus.RUNNING.value:
             raise ValidationError('You can add idea only in running event')
