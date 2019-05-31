@@ -6,9 +6,10 @@ from users_app.models import User, UserRoles
 from rest_framework.exceptions import PermissionDenied
 from .serializers import EventSerializerForCreate, EventSerializerForList,\
                          EventSerializerForUpdate, EventSerializer, EventIdeaSerializerForCreate,\
-                         EventIdeaSerializerForUpdate, EventIdeaSerializerForList
+                         EventIdeaSerializerForUpdate, EventIdeaSerializerForList,\
+                         CommentSerializerForCreate, CommentSerializerForList, CommentSerializerForUpdate
 from users_app.models import User, UserRoles
-from .models import Event, EventStatus, EventParticipant, EventIdea, EventIdeaRate, RateValues
+from .models import Event, EventStatus, EventParticipant, EventIdea, EventIdeaRate, RateValues, Comment
 
 class PermissionDecorators:
     def manager_only(fcn):
@@ -181,14 +182,61 @@ class EventsViewSet(viewsets.ViewSet):
             rate_obj.save()
         return Response({'message':'idea rated'})
 
-    def add_comment(self, request):
-        pass
+    def add_comment(self, request, pk=None):
+        user_obj = request.user
+        try:
+            idea_obj = EventIdea.objects.get(pk=pk)
+        except:
+            return Response({'message':'idea not exists'}, status.HTTP_404_NOT_FOUND)
+        if idea_obj.event.status != EventStatus.RUNNING.value:
+            return Response({'message':'Event is not currently running'}, status.HTTP_403_FORBIDDEN)
+        if user_obj not in idea_obj.event.participants.all():
+            return Response({'message':'you need to be participant to make comments'}, status.HTTP_403_FORBIDDEN)
+        serializer = CommentSerializerForCreate(data=request.data)
+        if serializer.is_valid():
+            serializer.create(serializer.data, user_obj, idea_obj)
+            return Response({'message':'comment added'})
+        return Response({'message':f'{serializer.errors}'}, status.HTTP_400_BAD_REQUEST)
+
+    def list_idea_comments(self, request, pk=None):
+        try:
+            idea_obj = EventIdea.objects.get(pk=pk)
+        except:
+            return Response({'message':'idea not exists'}, status.HTTP_404_NOT_FOUND)
+        if request.user not in idea_obj.event.participants.all():
+            return Response({'message':'you need to have participant priviledges'}, status.HTTP_403_FORBIDDEN)
+        queryset = Comment.objects.filter(target=idea_obj)
+        serializer = CommentSerializerForList(data=queryset, many=True)
+        serializer.is_valid()
+        return Response({'COMMENTS':serializer.data})
 
     def edit_comment(self, request, pk=None):
-        pass
+        try:
+            comment_obj = Comment.objects.get(pk=pk)
+        except:
+            return Response({'message':'comment not exists'}, status.HTTP_404_NOT_FOUND)
+        if comment_obj.target.event.status != EventStatus.RUNNING.value:
+            return Response({'message':'Related event is not currently running'}, status.HTTP_403_FORBIDDEN)
+        if request.user != comment_obj.creator:
+            return Response({'message':'you need to be owner to edit comments'}, status.HTTP_403_FORBIDDEN)
+        serializer = CommentSerializerForUpdate(data=request.data)
+        if serializer.is_valid():
+            serializer.update(serializer.data, comment_obj)
+            return Response({'message':'comment updated'})
+        return Response({'message':f'{serializer.errors}'}, status.HTTP_400_BAD_REQUEST)
 
     def destroy_comment(self, request, pk=None):
-        pass
+        try:
+            comment_obj = Comment.objects.get(pk=pk)
+        except:
+            return Response({'message':'comment not exists'}, status.HTTP_404_NOT_FOUND)
+        if comment_obj.target.event.status != EventStatus.RUNNING.value:
+            return Response({'message':'Related event is not currently running'}, status.HTTP_403_FORBIDDEN)
+        if request.user != comment_obj.creator:
+            return Response({'message':'you need to be owner to edit comments'}, status.HTTP_403_FORBIDDEN)
+        comment_obj.delete()
+        return Response({'message':'comment deleted'})
+
 
     def quit_event(self, request, pk=None):
         try:

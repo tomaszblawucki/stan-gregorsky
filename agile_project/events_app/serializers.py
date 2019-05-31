@@ -96,6 +96,71 @@ class EventSerializerForUpdate(serializers.ModelSerializer):
             'name':{'required':False},
             }
 
+
+class CommentSerializerForCreate(serializers.ModelSerializer):
+    def create(self, validated_data, user, idea_obj):
+        content = validated_data.get('content')
+        creator = user
+        target = idea_obj
+        comment_obj = Comment(
+            content=content,
+            target=target,
+            creator=creator
+        )
+        comment_obj.save()
+    class Meta:
+        model = Comment
+        fields=('content',)
+
+
+class CommentSerializerForUpdate(serializers.ModelSerializer):
+    def update(self, validated_data, comment_obj):
+        content = validated_data.get('content', comment_obj.content)
+        comment_obj.content = content
+        comment_obj.is_edited = True
+        comment_obj.edit_date = datetime.now()
+        comment_obj.save()
+    class Meta:
+        model = Comment
+        fields=('content',)
+
+
+class CommentSerializerForList(serializers.ModelSerializer):
+    creator_email = serializers.SerializerMethodField()
+    c_date = serializers.SerializerMethodField()
+    c_time = serializers.SerializerMethodField()
+    e_date = serializers.SerializerMethodField()
+    e_time = serializers.SerializerMethodField()
+
+    def get_creator_email(self, obj):
+        return obj.creator.email
+
+    def get_c_date(self, obj):
+        date = obj.creation_date.strftime('%Y-%m-%d')
+        return date
+
+    def get_c_time(self, obj):
+        time = obj.creation_date.strftime('%H:%M')
+        return time
+
+    def get_e_date(self, obj):
+        if obj.is_edited:
+            date = obj.edit_date.strftime('%Y-%m-%d')
+            return date
+        else:
+            return None
+
+    def get_e_time(self, obj):
+        if obj.is_edited:
+            time = obj.edit_date.strftime('%H:%M')
+            return time
+        else:
+            return None
+
+    class Meta:
+        model=Comment
+        fields=('pk', 'content', 'creator', 'creator_email', 'creation_date', 'c_date', 'c_time', 'is_edited', 'edit_date', 'e_date', 'e_time')
+
 class EventSerializer(serializers.ModelSerializer):
     def add_participants(self, request, event_obj):
         participants_ids = request.get('participants', None)
