@@ -70,6 +70,7 @@ class EventIdea(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     is_edited = models.BooleanField(default=False)
+    creation_date = models.DateTimeField(auto_now_add=True)
 
 
 class Comment(models.Model):

@@ -264,6 +264,16 @@ class EventIdeaSerializerForList(serializers.ModelSerializer):
     positive_rates = serializers.SerializerMethodField()
     negative_rates = serializers.SerializerMethodField()
     overall_score = serializers.SerializerMethodField()
+    creator_name = serializers.SerializerMethodField()
+    # creator_surname = serializers.SerializerMethodField()
+    add_date = serializers.SerializerMethodField()
+    add_time = serializers.SerializerMethodField()
+
+    def get_creator_name(self, obj):
+        return f'{obj.creator.name} {obj.creator.surname}'
+
+    # def get_creator_surname(self, obj):
+    #     return obj.creator.surname
 
     def get_positive_rates(self, obj):
         rate_cnt = EventIdeaRate.objects.filter(target_event_idea=obj, rate=1).count()
@@ -278,9 +288,15 @@ class EventIdeaSerializerForList(serializers.ModelSerializer):
         neg_rate_cnt = EventIdeaRate.objects.filter(target_event_idea=obj, rate=-1).count()
         return pos_rate_cnt - neg_rate_cnt
 
+    def get_add_date(self, obj):
+        return obj.creation_date.strftime('%Y-%m-%d')
+
+    def get_add_time(self, obj):
+        return obj.creation_date.strftime('%H:%M')
+
     class Meta:
         model = EventIdea
-        fields = ('pk', 'name', 'description', 'positive_rates', 'negative_rates', 'overall_score')
+        fields = ('pk', 'name', 'creator', 'creator_name', 'description', 'positive_rates', 'negative_rates', 'overall_score', 'creation_date', 'add_date', 'add_time')
 
 
 class EventSerializerForList(serializers.ModelSerializer):
