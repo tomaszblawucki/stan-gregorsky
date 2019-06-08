@@ -92,7 +92,8 @@ class ConversationSerializer(serializers.ModelSerializer):
         return response
 
     def get_notifications(self, user):
-        notifications = Message.objects.filter( (Q(addressee=user) | Q(sender=user)) & Q(notification=True) ).order_by('-sent_date')
+        # notifications = Message.objects.filter( (Q(addressee=user) | Q(sender=user)) & Q(notification=True) ).order_by('-sent_date')
+        notifications = Message.objects.filter( Q(addressee=user) & Q(notification=True) ).order_by('-sent_date')
         notification_list = []
         for notif in notifications:
             date = self.format_date(notif.sent_date)
