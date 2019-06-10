@@ -193,7 +193,7 @@
 			"response": []
 		},
 		{
-			"name": "tasks-create",
+			"name": "tasks_app.create",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -205,7 +205,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86",
 						"type": "text"
 					}
 				],
@@ -214,7 +214,7 @@
 					"urlencoded": [
 						{
 							"key": "title",
-							"value": "first task",
+							"value": "TASK TO ASSIGN",
 							"type": "text"
 						},
 						{
@@ -257,7 +257,7 @@
 			"response": []
 		},
 		{
-			"name": "tasks-list",
+			"name": "tasks_app.list",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -272,7 +272,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86",
 						"type": "text"
 					}
 				],
@@ -293,7 +293,56 @@
 			"response": []
 		},
 		{
-			"name": "my_tasks",
+			"name": "ideas_app.create_note",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "content",
+							"value": "Some Idea Contetnt",
+							"type": "text"
+						},
+						{
+							"key": "title",
+							"value": "Title of note",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/ideas/1/create-note/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ideas",
+						"1",
+						"create-note",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ideas_app.list_notes",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -303,18 +352,171 @@
 					{
 						"key": "Content-Type",
 						"name": "Content-Type",
-						"value": "application/x-www-form-urlencoded",
-						"type": "text"
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
 					},
 					{
 						"key": "Authorization",
-						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582",
-						"type": "text"
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "content",
+							"value": "Some Idea Contetnt",
+							"type": "text"
+						},
+						{
+							"key": "title",
+							"value": "Title of note",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/ideas/list-notes/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ideas",
+						"list-notes",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ideas_app.delete_note",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "content",
+							"value": "Some Idea Contetnt",
+							"type": "text"
+						},
+						{
+							"key": "title",
+							"value": "Title of note",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/ideas/list-notes/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ideas",
+						"list-notes",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ideas_app.update_note",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "content",
+							"value": "Some Idea Contetnt",
+							"type": "text"
+						},
+						{
+							"key": "title",
+							"value": "Title of note",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/ideas/list-notes/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"ideas",
+						"list-notes",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tasks_app.my_tasks",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
 					}
 				],
 				"body": {},
 				"url": {
-					"raw": "http://localhost:8000/tasks/",
+					"raw": "http://localhost:8000/tasks/my_tasks/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -322,6 +524,7 @@
 					"port": "8000",
 					"path": [
 						"tasks",
+						"my_tasks",
 						""
 					]
 				}
@@ -433,7 +636,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86",
 						"type": "text"
 					}
 				],
@@ -442,7 +645,7 @@
 					"urlencoded": [
 						{
 							"key": "user_id",
-							"value": "3",
+							"value": "5",
 							"type": "text"
 						}
 					]
@@ -515,7 +718,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86",
 						"type": "text"
 					},
 					{
@@ -530,12 +733,12 @@
 					"urlencoded": [
 						{
 							"key": "content",
-							"value": "message in the bottle",
+							"value": "notification NEW",
 							"type": "text"
 						},
 						{
 							"key": "addressee",
-							"value": "1",
+							"value": "5,6,7",
 							"type": "text"
 						},
 						{
@@ -697,7 +900,7 @@
 					{
 						"key": "Authorization",
 						"type": "text",
-						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582"
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
 					}
 				],
 				"body": {
@@ -2306,7 +2509,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8000/events/16/list-ideas/",
+					"raw": "http://localhost:8000/events/ideas/1/get_idea_rate",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -2314,9 +2517,9 @@
 					"port": "8000",
 					"path": [
 						"events",
-						"16",
-						"list-ideas",
-						""
+						"ideas",
+						"1",
+						"get_idea_rate"
 					]
 				}
 			},

@@ -54,7 +54,8 @@ class ListTasks(viewsets.ViewSet, ProjectManagerPermission):
         assigned_tasks = Task.objects.filter(assigned_user=request.user)
         created_tasks = Task.objects.filter(creator=request.user)
         assigned_tasks_list = [
-            {'title':t.title,
+            {'id':t.id,
+            'title':t.title,
             'description':t.description,
             'start_date':t.start_date,
             'end_date':t.end_date,
@@ -62,7 +63,8 @@ class ListTasks(viewsets.ViewSet, ProjectManagerPermission):
             'project_group':t.project_group.group_name if t.project_group else None}
         for t in assigned_tasks]
         created_tasks_list = [
-            {'title':t.title,
+            {'id':t.id,
+            'title':t.title,
             'description':t.description,
             'start_date':t.start_date,
             'end_date':t.end_date,

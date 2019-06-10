@@ -15,7 +15,7 @@ note_delete = views.ListNotes.as_view({'get':'destroy'})
 urlpatterns = [
     path('create-note/', views.CreateNote.as_view(), name='create_note'),
     path('list-notes/', notes_list, name='notes_list'),
-    path('list-notes/<int:pk>/', note_details, name='note_details'),
-    path('list-notes/<int:pk>/update/', note_update, name='update_note'),
-    path('list-notes/<int:pk>/destroy/', note_delete, name='delete_note'),
+    path('<int:pk>/', note_details, name='note_details'),
+    path('<int:pk>/update/', note_update, name='update_note'),
+    path('<int:pk>/destroy/', note_delete, name='delete_note'),
 ]
