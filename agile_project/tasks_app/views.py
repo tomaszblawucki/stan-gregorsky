@@ -50,6 +50,29 @@ class ListTasks(viewsets.ViewSet, ProjectManagerPermission):
         serializer = TaskSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    def my_tasks(self, request):
+        assigned_tasks = Task.objects.filter(assigned_user=request.user)
+        created_tasks = Task.objects.filter(creator=request.user)
+        assigned_tasks_list = [
+            {'title':t.title,
+            'description':t.description,
+            'start_date':t.start_date,
+            'end_date':t.end_date,
+            'status':t.status,
+            'project_group':t.project_group.group_name if t.project_group else None}
+        for t in assigned_tasks]
+        created_tasks_list = [
+            {'title':t.title,
+            'description':t.description,
+            'start_date':t.start_date,
+            'end_date':t.end_date,
+            'status':t.status,
+            'project_group':t.project_group.group_name if t.project_group else None}
+        for t in created_tasks]
+        resp = {'CREATED':created_tasks_list,
+                'ASSIGNED':assigned_tasks_list}
+        return Response(resp)
+
     def retrieve(self, request, pk=None):
         queryset = Task.objects.all()
         task = get_object_or_404(queryset, pk=pk)
@@ -135,7 +158,6 @@ class ListTasks(viewsets.ViewSet, ProjectManagerPermission):
         except:
             return Response({'message': 'User not exists.'},
                              status=status.HTTP_404_NOT_FOUND)
-
         if task_obj.assigned_user and request.user.role != UserRoles['MAN'].value:
             return Response({'Only Project Manager can change person already assigned to task'})
         task_obj.assigned_user = user_obj

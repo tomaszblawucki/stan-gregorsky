@@ -182,6 +182,18 @@ class EventsViewSet(viewsets.ViewSet):
             rate_obj.save()
         return Response({'message':'idea rated'})
 
+    def get_idea_rate(self, request, pk=None):
+        try:
+            idea_obj = EventIdea.objects.get(pk=pk)
+        except:
+            return Response({'message':'idea not found'}, status.HTTP_404_NOT_FOUND)
+        if request.user not in [p for p in idea_obj.event.participants.all()]:
+            return Response({'message':'You have to be participant of corresponding event to see the rates'}, status.HTTP_403_FORBIDDEN)
+        pos_rate_cnt = EventIdeaRate.objects.filter(target_event_idea=idea_obj, rate=1).count()
+        neg_rate_cnt = EventIdeaRate.objects.filter(target_event_idea=idea_obj, rate=-1).count()
+        resp = {'idea_id':idea_obj.id, 'score':pos_rate_cnt - neg_rate_cnt}
+        return Response(resp)
+
     def add_comment(self, request, pk=None):
         user_obj = request.user
         try:

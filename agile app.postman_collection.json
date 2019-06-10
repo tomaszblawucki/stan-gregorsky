@@ -293,6 +293,42 @@
 			"response": []
 		},
 		{
+			"name": "my_tasks",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Token 99ab1462cf0df81af45efa4bbe57498508ffc582",
+						"type": "text"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8000/tasks/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"tasks",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "tasks_app.change_status",
 			"request": {
 				"method": "POST",
@@ -2030,7 +2066,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8000/events/ideas/1/list-comments/",
+					"raw": "http://localhost:8000/events/ideas/destroy-comment/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -2039,9 +2075,8 @@
 					"path": [
 						"events",
 						"ideas",
-						"1",
-						"list-comments",
-						""
+						"destroy-comment",
+						"2"
 					]
 				}
 			},
@@ -2185,6 +2220,58 @@
 		},
 		{
 			"name": "events_app.list_ideas",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Token bfdd8725fd8b123245c5212cd311002903b4ca86"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Idea #1 edited",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "first idea edited",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/events/16/list-ideas/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"16",
+						"list-ideas",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "events_app.list_ideas Copy",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
