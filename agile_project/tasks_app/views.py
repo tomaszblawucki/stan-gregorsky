@@ -8,6 +8,7 @@ from rest_framework.permissions import BasePermission, IsAuthenticated
 
 from .serializers import TaskSerializer
 from .models import Task, TaskStatus
+from users_app.models import UserRoles
 from group_management_app.models import ProjectGroup
 
 
@@ -134,7 +135,8 @@ class ListTasks(viewsets.ViewSet, ProjectManagerPermission):
         except:
             return Response({'message': 'User not exists.'},
                              status=status.HTTP_404_NOT_FOUND)
-        if task_obj.assigned_user and request.user.role != 'MAN':
+
+        if task_obj.assigned_user and request.user.role != UserRoles['MAN'].value:
             return Response({'Only Project Manager can change person already assigned to task'})
         task_obj.assigned_user = user_obj
         task_obj.save()
