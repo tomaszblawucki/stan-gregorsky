@@ -61,7 +61,7 @@ class ListTasks(viewsets.ViewSet, ProjectManagerPermission):
             'end_date':t.end_date,
             'status':t.status,
             'project_group':t.project_group.pk if t.project_group else None,
-            'project_group':t.assigned_user.pk if t.assigned_user else None}
+            'assigned_user':t.assigned_user.pk if t.assigned_user else None}
             for t in assigned_tasks]
         created_tasks_list = [
             {'id':t.id,
@@ -71,7 +71,7 @@ class ListTasks(viewsets.ViewSet, ProjectManagerPermission):
             'end_date':t.end_date,
             'status':t.status,
             'project_group':t.project_group.pk if t.project_group else None,
-            'project_group':t.assigned_user.pk if t.assigned_user else None}
+            'assigned_user':t.assigned_user.pk if t.assigned_user else None}
         for t in created_tasks]
         resp = {'CREATED':created_tasks_list,
                 'ASSIGNED':assigned_tasks_list}
